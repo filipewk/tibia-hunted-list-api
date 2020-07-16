@@ -4,7 +4,8 @@
   "description": "Tibia hunted-list API",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:staged": "jest"
   },
   "author": "Filipe A. Oliveira",
   "license": "ISC",
