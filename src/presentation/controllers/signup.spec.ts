@@ -1,7 +1,7 @@
 import { SignUpController } from './signup'
-import { MissingParamError } from '../errors/missing-param'
-import { InvalidParamError } from '../errors/invalid-param'
-import { HttpRequest } from '../protocols/http'
+import { MissingParamError } from '@/presentation/errors/missing-param'
+import { InvalidParamError } from '@/presentation/errors/invalid-param'
+import { HttpRequest } from '@/presentation/protocols/http'
 import faker from 'faker'
 
 const mockRequest = (): HttpRequest => {
