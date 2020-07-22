@@ -6,11 +6,13 @@ import { MissingParamError } from '@/presentation/errors/missing-param-error'
 import { EmailValidator } from '@/presentation/protocols/email-validator'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 import { AddAccount } from '@/domain/usecases/add-account'
+import { Authentication } from '@/domain/usecases/authentication'
 
 export class SignUpController implements Controller {
   constructor (
     private readonly emailValidator: EmailValidator,
-    private readonly addAccount: AddAccount
+    private readonly addAccount: AddAccount,
+    private readonly authentication: Authentication
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -37,6 +39,10 @@ export class SignUpController implements Controller {
       if (!account) {
         return forbidden(new EmailInUseError())
       }
+      await this.authentication.auth({
+        email,
+        password
+      })
     } catch (error) {
       return serverError(error.stack)
     }
