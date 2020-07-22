@@ -117,7 +117,7 @@ describe('Signup Controller', () => {
     expect(emailValidatorSpy).toHaveBeenCalledWith(httpRequest.body.email)
   })
 
-  test('Should SignUpController return 500 if EmailValidator throws', async () => {
+  test('Should return 500 if EmailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockRejectedValueOnce(new Error())
     const httpRequest = mockRequest()
@@ -152,5 +152,13 @@ describe('Signup Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(403)
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+
+  test('Should return 500 if AddAccount throws', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockRejectedValueOnce(new Error())
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
