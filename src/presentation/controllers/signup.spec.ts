@@ -2,9 +2,9 @@ import { SignUpController } from './signup'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
 import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
 import { HttpRequest } from '@/presentation/protocols/http'
-import { serverError } from '@/presentation/helpers/http/http-helper'
-import faker from 'faker'
+import { serverError, badRequest } from '@/presentation/helpers/http/http-helper'
 import { EmailValidator } from '../protocols/email-validator'
+import faker from 'faker'
 
 const mockRequest = (): HttpRequest => {
   const password = faker.internet.password()
@@ -99,7 +99,14 @@ describe('Signup Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockRejectedValueOnce(new Error())
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 400 if password is different from the passwordConfirmation  ', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    httpRequest.body.passwordConfirmation = 'wrong_password'
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
   })
 })
