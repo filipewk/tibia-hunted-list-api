@@ -1,9 +1,10 @@
 import { HttpRequest, HttpResponse } from '@/presentation/protocols/http'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, forbidden } from '@/presentation/helpers/http/http-helper'
 import { Controller } from '@/presentation//protocols/controller'
 import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
-import { EmailValidator } from '../protocols/email-validator'
+import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 import { AddAccount } from '@/domain/usecases/add-account'
 
 export class SignUpController implements Controller {
@@ -28,11 +29,14 @@ export class SignUpController implements Controller {
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
-      await this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         email,
         password
       })
+      if (!account) {
+        return forbidden(new EmailInUseError())
+      }
     } catch (error) {
       return serverError(error.stack)
     }

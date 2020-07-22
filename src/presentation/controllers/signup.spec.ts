@@ -2,11 +2,12 @@ import { SignUpController } from './signup'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
 import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
 import { HttpRequest } from '@/presentation/protocols/http'
-import { serverError, badRequest } from '@/presentation/helpers/http/http-helper'
+import { serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
 import { EmailValidator } from '@/presentation/protocols/email-validator'
 import { AddAccount, AddAccountParams } from '@/domain/usecases/add-account'
 import { AddAccountModel } from '@/domain/models/account'
-import { ServerError } from '../errors/server-error'
+import { ServerError } from '@/presentation/errors/server-error'
+import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 import faker from 'faker'
 
 const mockRequest = (): HttpRequest => {
@@ -108,7 +109,7 @@ describe('Signup Controller', () => {
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 
-  test('Should calls emailValidators with correct email', async () => {
+  test('Should calls EmailValidator with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const emailValidatorSpy = jest.spyOn(emailValidatorStub, 'isValid')
     const httpRequest = mockRequest()
@@ -132,7 +133,7 @@ describe('Signup Controller', () => {
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
   })
 
-  test('Should calls addAccount with correct values', async () => {
+  test('Should calls AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addAccountSpy = jest.spyOn(addAccountStub, 'add')
     const httpRequest = mockRequest()
@@ -142,5 +143,14 @@ describe('Signup Controller', () => {
       email: httpRequest.body.email,
       password: httpRequest.body.password
     })
+  })
+
+  test('Should return 403 with AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(null)
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(403)
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 })
