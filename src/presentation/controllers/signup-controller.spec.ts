@@ -1,7 +1,7 @@
 import { SignUpController } from './signup-controller'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import { HttpRequest } from '@/presentation/protocols'
-import { serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
+import { serverError, badRequest, forbidden, ok } from '@/presentation/helpers/http/http-helper'
 import { AddAccountSpy, EmailValidatorSpy, AuthenticationSpy } from '@/presentation/tests/mocks/account'
 import faker from 'faker'
 
@@ -152,5 +152,12 @@ describe('Signup Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 200 if valid data is provided', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok(authenticationSpy.authenticationModel))
   })
 })

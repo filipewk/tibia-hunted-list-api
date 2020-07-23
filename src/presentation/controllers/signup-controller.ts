@@ -1,5 +1,5 @@
 import { AddAccount, Authentication } from './signup-controller-protocols'
-import { badRequest, serverError, forbidden } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, forbidden, ok } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, HttpResponse, EmailValidator, Controller } from '@/presentation/protocols'
 import { InvalidParamError, EmailInUseError, MissingParamError } from '@/presentation/errors'
 
@@ -20,9 +20,7 @@ export class SignUpController implements Controller {
         }
       }
       const isValid = await this.emailValidator.isValid(email)
-      if (!isValid) {
-        return badRequest(new InvalidParamError('email'))
-      }
+      if (!isValid) return badRequest(new InvalidParamError('email'))
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
@@ -34,10 +32,11 @@ export class SignUpController implements Controller {
       if (!account) {
         return forbidden(new EmailInUseError())
       }
-      await this.authentication.auth({
+      const authenticationModel = await this.authentication.auth({
         email,
         password
       })
+      return ok(authenticationModel)
     } catch (error) {
       return serverError(error.stack)
     }
