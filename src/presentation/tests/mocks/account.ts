@@ -10,32 +10,33 @@ import { EmailValidator } from '@/presentation/protocols'
 import { mockAccountModel } from '@/domain/tests/mocks/account'
 import faker from 'faker'
 
-export const mockEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): any {
-      return true
-    }
+export class EmailValidatorSpy implements EmailValidator {
+  emailValidatorResult = true
+
+  isValid (email: string): any {
+    return this.emailValidatorResult
   }
-  return new EmailValidatorStub()
 }
 
-export const mockAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add (account: AddAccountParams): Promise<AddAccountModel> {
-      return Promise.resolve(mockAccountModel())
-    }
+export class AddAccountSpy implements AddAccount {
+  accountModel = mockAccountModel()
+  addAccountParams: AddAccountParams
+
+  async add (account: AddAccountParams): Promise<AddAccountModel> {
+    this.addAccountParams = account
+    return Promise.resolve(this.accountModel)
   }
-  return new AddAccountStub()
 }
 
-export const mockAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
-      return Promise.resolve({
-        accessToken: faker.random.uuid(),
-        name: faker.name.findName()
-      })
-    }
+export class AuthenticationSpy implements Authentication {
+  authenticationParams: AuthenticationParams
+  authenticationModel = {
+    accessToken: faker.random.uuid(),
+    name: faker.name.findName()
   }
-  return new AuthenticationStub()
+
+  async auth (authenticationParams: AuthenticationParams): Promise<AuthenticationModel> {
+    this.authenticationParams = authenticationParams
+    return Promise.resolve(this.authenticationModel)
+  }
 }
