@@ -1,15 +1,9 @@
-import { SignUpController } from './signup'
-import { MissingParamError } from '@/presentation/errors/missing-param-error'
-import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
-import { HttpRequest } from '@/presentation/protocols/http'
+import { SignUpController } from './signup-controller'
+import { Authentication, AddAccount } from './signup-controller-protocols'
+import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '@/presentation/errors'
+import { HttpRequest, EmailValidator } from '@/presentation/protocols'
 import { serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
-import { EmailValidator } from '@/presentation/protocols/email-validator'
-import { AddAccount, AddAccountParams } from '@/domain/usecases/add-account'
-import { AddAccountModel } from '@/domain/models/account'
-import { ServerError } from '@/presentation/errors/server-error'
-import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { AuthenticationParams, Authentication } from '@/domain/usecases/authentication'
-import { AuthenticationModel } from '@/domain/models/authentication'
+import { mockAddAccount, mockEmailValidator, mockAuthentication } from '@/presentation/tests/mocks/account'
 import faker from 'faker'
 
 const mockRequest = (): HttpRequest => {
@@ -22,45 +16,6 @@ const mockRequest = (): HttpRequest => {
       passwordConfirmation: password
     }
   }
-}
-
-const mockAccount = (): AddAccountModel => ({
-  id: faker.random.uuid(),
-  name: faker.name.findName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
-})
-
-const mockEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): any {
-      return true
-    }
-  }
-  return new EmailValidatorStub()
-}
-
-const mockAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add (account: AddAccountParams): Promise<AddAccountModel> {
-      return Promise.resolve(mockAccount())
-    }
-  }
-  return new AddAccountStub()
-}
-
-const mockAuthenticationReturn = (): AuthenticationModel => ({
-  accessToken: faker.random.uuid(),
-  name: faker.name.findName()
-})
-
-const mockAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
-      return Promise.resolve(mockAuthenticationReturn())
-    }
-  }
-  return new AuthenticationStub()
 }
 
 type SutTypes = {

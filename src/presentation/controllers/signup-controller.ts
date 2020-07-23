@@ -1,12 +1,7 @@
-import { HttpRequest, HttpResponse } from '@/presentation/protocols/http'
+import { AddAccount, Authentication } from './signup-controller-protocols'
 import { badRequest, serverError, forbidden } from '@/presentation/helpers/http/http-helper'
-import { Controller } from '@/presentation//protocols/controller'
-import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
-import { MissingParamError } from '@/presentation/errors/missing-param-error'
-import { EmailValidator } from '@/presentation/protocols/email-validator'
-import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { AddAccount } from '@/domain/usecases/add-account'
-import { Authentication } from '@/domain/usecases/authentication'
+import { HttpRequest, HttpResponse, EmailValidator, Controller } from '@/presentation/protocols'
+import { InvalidParamError, EmailInUseError, MissingParamError } from '@/presentation/errors'
 
 export class SignUpController implements Controller {
   constructor (
