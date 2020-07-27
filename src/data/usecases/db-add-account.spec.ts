@@ -1,5 +1,5 @@
 import { DbAddAccount } from './db-add-account'
-import { mockAddAccountParams } from '@/domain/tests/mocks/account'
+import { mockAddAccountParams } from '@/domain/test/mocks/account'
 import { HasherSpy } from '@/data/test/mocks/mock-criptography'
 
 describe('DbAddAccount Usecases', () => {
