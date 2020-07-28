@@ -82,9 +82,9 @@ describe('DbAddAccount Usecases', () => {
     expect(loadAccountByEmailRepositorySpy.email).toBe(addAccountParams.email)
   })
 
-  test('Should throw if AddAccountRepository throws', async () => {
-    const { sut, addAccountRepositorySpy } = makeSut()
-    jest.spyOn(addAccountRepositorySpy, 'add').mockRejectedValueOnce(new Error())
+  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositorySpy } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockRejectedValueOnce(new Error())
     const addAccountParams = mockAddAccountParams()
     const promise = sut.add(addAccountParams)
     await expect(promise).rejects.toThrow()
