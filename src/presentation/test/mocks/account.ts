@@ -1,5 +1,5 @@
 import {
-  AddAccountModel,
+  AccountModel,
   AddAccountParams,
   Authentication,
   AuthenticationModel,
@@ -22,7 +22,7 @@ export class AddAccountSpy implements AddAccount {
   accountModel = mockAccountModel()
   addAccountParams: AddAccountParams
 
-  async add (account: AddAccountParams): Promise<AddAccountModel> {
+  async add (account: AddAccountParams): Promise<AccountModel> {
     this.addAccountParams = account
     return Promise.resolve(this.accountModel)
   }
