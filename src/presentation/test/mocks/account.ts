@@ -7,7 +7,7 @@ import {
   AddAccount
 } from '@/presentation/controllers/signup-controller-protocols'
 import { EmailValidator } from '@/presentation/protocols'
-import { mockAccountModel } from '@/domain/test/mocks/account'
+import { mockAccountModel } from '@/domain/test/mocks'
 import faker from 'faker'
 
 export class EmailValidatorSpy implements EmailValidator {

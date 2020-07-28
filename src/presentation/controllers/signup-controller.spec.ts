@@ -2,7 +2,7 @@ import { SignUpController } from './signup-controller'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import { HttpRequest } from '@/presentation/protocols'
 import { serverError, badRequest, forbidden, ok } from '@/presentation/helpers/http/http-helper'
-import { AddAccountSpy, EmailValidatorSpy, AuthenticationSpy } from '@/presentation/test/mocks/account'
+import { AddAccountSpy, EmailValidatorSpy, AuthenticationSpy } from '@/presentation/test/mocks'
 import faker from 'faker'
 
 const mockRequest = (): HttpRequest => {
