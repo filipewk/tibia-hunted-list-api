@@ -11,7 +11,7 @@ services:
       - ./data:/data/db
 
   api:
-    container_name: api-container
+    container_name: api-tibia
     image: node
     working_dir: /usr/src/tibia-hunted-list
     restart: always
@@ -23,7 +23,7 @@ services:
       - "5050:5050"
       - "9222:9222"
     links:
-      - postgres
+      - postegres
 
   pgadmin:
     image: dpage/pgadmin4

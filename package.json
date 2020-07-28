@@ -35,12 +35,14 @@
     "husky": "^4.2.5",
     "jest": "^26.1.0",
     "lint-staged": "^10.2.11",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.1.2",
     "typescript": "^3.9.6"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
     "module-alias": "^2.2.2",
+    "pg": "^8.3.0",
     "validator": "^13.1.1"
   },
   "_moduleAliases": {
