@@ -1,22 +1,27 @@
 import { DbAddAccount } from './db-add-account'
-import { mockAddAccountParams } from '@/domain/test/mocks/account'
+import { mockAddAccountParams, mockAccountModel } from '@/domain/test/mocks/account'
 import { HasherSpy } from '@/data/test/mocks/criptography'
-import { AddAccountRepositorySpy } from '@/data/test/mocks/db-account'
+import { AddAccountRepositorySpy, LoadAccountByEmailRepositorySpy } from '@/data/test/mocks/db-account'
 
 type SutTypes = {
   sut: DbAddAccount
   hasherSpy: HasherSpy
   addAccountRepositorySpy: AddAccountRepositorySpy
+  loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
+  loadAccountByEmailRepositorySpy.accountModel = null
   const hasherSpy = new HasherSpy()
   const addAccountRepositorySpy = new AddAccountRepositorySpy()
-  const sut = new DbAddAccount(hasherSpy, addAccountRepositorySpy)
+  const sut = new DbAddAccount(hasherSpy, addAccountRepositorySpy, loadAccountByEmailRepositorySpy)
   return {
     sut,
     hasherSpy,
-    addAccountRepositorySpy
+    addAccountRepositorySpy,
+    loadAccountByEmailRepositorySpy
+
   }
 }
 
@@ -53,5 +58,20 @@ describe('DbAddAccount Usecases', () => {
     const addAccountParams = mockAddAccountParams()
     const promise = sut.add(addAccountParams)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an account on success', async () => {
+    const { sut, addAccountRepositorySpy } = makeSut()
+    const addAccountParams = mockAddAccountParams()
+    const account = await sut.add(addAccountParams)
+    expect(account).toEqual(addAccountRepositorySpy.accountModel)
+  })
+
+  test('Should return null if LoadAccountByEmailRepository not returns null', async () => {
+    const { sut, loadAccountByEmailRepositorySpy } = makeSut()
+    loadAccountByEmailRepositorySpy.accountModel = mockAccountModel()
+    const addAccountParams = mockAddAccountParams()
+    const account = await sut.add(addAccountParams)
+    expect(account).toBeNull()
   })
 })
