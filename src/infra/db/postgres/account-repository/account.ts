@@ -1,5 +1,5 @@
 import { AddAccountRepository, AddAccountParams, AccountModel } from '@/data/usecases/db-add-account-protocols'
-import User from '../models/user'
+import User from '@/infra/db/postgres/models/user'
 
 export class AccountPostgresRepository implements AddAccountRepository {
   async add (data: AddAccountParams): Promise<AccountModel> {
