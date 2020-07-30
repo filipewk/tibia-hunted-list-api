@@ -1,7 +1,8 @@
 import { AccountPostgresRepository } from './account'
 import User from '@/infra/db/postgres/models/user'
-import { SequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
+import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
 import { mockAccountModel } from '@/domain/test/mocks'
+import env from '@/main/config/env'
 
 const account = mockAccountModel()
 
@@ -11,11 +12,11 @@ const makeSut = (): AccountPostgresRepository => {
 
 describe('Account Postgres Repository', () => {
   beforeAll(() => {
-    SequelizeHelper.connect()
+    sequelizeHelper.connect(env.postgresUrl)
   })
 
-  afterAll(() => {
-    SequelizeHelper.disconnect()
+  afterAll(async () => {
+    await sequelizeHelper.disconnect()
   })
 
   beforeEach(async () => {

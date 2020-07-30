@@ -1,15 +1,16 @@
 import app from '@/main/config/app'
 import User from '@/infra/db/postgres/models/user'
-import { SequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
+import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
 import request from 'supertest'
+import env from '@/main/config/env'
 
 describe('SignUp Routes', () => {
   beforeAll(() => {
-    SequelizeHelper.connect()
+    sequelizeHelper.connect(env.postgresUrl)
   })
 
-  afterAll(() => {
-    SequelizeHelper.disconnect()
+  afterAll(async () => {
+    await sequelizeHelper.disconnect()
   })
 
   beforeEach(async () => {

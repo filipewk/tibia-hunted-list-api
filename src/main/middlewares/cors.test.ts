@@ -4,7 +4,7 @@ import request from 'supertest'
 describe('CORS Middleware', () => {
   test('Should enable CORS', async () => {
     app.get('/test_cors', (req, res) => {
-      res.send()
+      res.sendStatus(200)
     })
     await request(app)
       .get('/test_cors')

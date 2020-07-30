@@ -1,6 +1,7 @@
 import Sequelize, { Model, Optional } from 'sequelize'
-import { SequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
+import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
 import { AccountModel } from '@/domain/models/account'
+import env from '@/main/config/env'
 
 interface UserCreationAttributes extends Optional<AccountModel, 'id'> {}
 
@@ -43,7 +44,7 @@ User.init(
     modelName: 'users',
     freezeTableName: true,
     tableName: 'users',
-    sequelize: SequelizeHelper.connect()
+    sequelize: sequelizeHelper.connect(env.postgresUrl)
   }
 )
 
