@@ -1,4 +1,4 @@
-import { AddAccountRepository, AddAccountParams, AccountModel } from '@/data/usecases/db-add-account-protocols'
+import { AddAccountRepository, AddAccountParams, AccountModel } from '@/data/usecases/account/add-account/db-add-account-protocols'
 import User from '@/infra/db/postgres/models/user'
 
 export class AccountPostgresRepository implements AddAccountRepository {

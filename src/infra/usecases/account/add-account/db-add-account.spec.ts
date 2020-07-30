@@ -20,7 +20,6 @@ const makeSut = (): SutTypes => {
     hasherSpy,
     addAccountRepositorySpy,
     loadAccountByEmailRepositorySpy
-
   }
 }
 
