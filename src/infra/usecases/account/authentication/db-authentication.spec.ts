@@ -1,27 +1,30 @@
 import { DbAuthentication } from './db-authentication'
-import { LoadAccountByEmailRepositorySpy } from '@/data/test/mocks'
+import { LoadAccountByEmailRepositorySpy, HashComparerSpy } from '@/data/test/mocks'
 import { mockAuthenticationParams } from '@/domain/test/mocks'
 
 type SutTypes = {
   sut: DbAuthentication
-  loadAccountByEmailRepository: LoadAccountByEmailRepositorySpy
+  loadAccountByEmailRepositorySpy: LoadAccountByEmailRepositorySpy
+  hashComparerSpy: HashComparerSpy
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountByEmailRepository = new LoadAccountByEmailRepositorySpy()
-  const sut = new DbAuthentication(loadAccountByEmailRepository)
+  const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
+  const hashComparerSpy = new HashComparerSpy()
+  const sut = new DbAuthentication(loadAccountByEmailRepositorySpy, hashComparerSpy)
   return {
     sut,
-    loadAccountByEmailRepository
+    loadAccountByEmailRepositorySpy,
+    hashComparerSpy
   }
 }
 
 describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
-    const { sut, loadAccountByEmailRepository } = makeSut()
+    const { sut, loadAccountByEmailRepositorySpy } = makeSut()
     const authenticationParams = mockAuthenticationParams()
     await sut.auth(authenticationParams)
-    expect(loadAccountByEmailRepository.email).toBe(authenticationParams.email)
+    expect(loadAccountByEmailRepositorySpy.email).toBe(authenticationParams.email)
   })
 
   test('Should return null if LoadAccountByEmailRepository return null', async () => {
@@ -31,9 +34,16 @@ describe('DbAuthentication UseCase', () => {
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
-    const { sut, loadAccountByEmailRepository } = makeSut()
-    jest.spyOn(loadAccountByEmailRepository, 'loadByEmail').mockRejectedValueOnce(new Error())
+    const { sut, loadAccountByEmailRepositorySpy } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockRejectedValueOnce(new Error())
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call HashComparer with correct values', async () => {
+    const { sut, loadAccountByEmailRepositorySpy, hashComparerSpy } = makeSut()
+    const authenticationParams = mockAuthenticationParams()
+    await sut.auth(authenticationParams)
+    expect(loadAccountByEmailRepositorySpy.accountModel.password).toBe(hashComparerSpy.digest)
   })
 })
