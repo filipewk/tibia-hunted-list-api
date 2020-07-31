@@ -28,7 +28,8 @@ describe('DbAuthentication UseCase', () => {
   })
 
   test('Should return null if LoadAccountByEmailRepository return null', async () => {
-    const { sut } = makeSut()
+    const { sut, loadAccountByEmailRepositorySpy } = makeSut()
+    loadAccountByEmailRepositorySpy.accountModel = null
     const model = await sut.auth(mockAuthenticationParams())
     expect(model).toBeNull()
   })
@@ -45,5 +46,12 @@ describe('DbAuthentication UseCase', () => {
     const authenticationParams = mockAuthenticationParams()
     await sut.auth(authenticationParams)
     expect(loadAccountByEmailRepositorySpy.accountModel.password).toBe(hashComparerSpy.digest)
+  })
+
+  test('Should return null if HashComparer return null', async () => {
+    const { sut, hashComparerSpy } = makeSut()
+    hashComparerSpy.isValid = false
+    const model = await sut.auth(mockAuthenticationParams())
+    expect(model).toBeNull()
   })
 })

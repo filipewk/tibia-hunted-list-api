@@ -12,7 +12,13 @@ export class DbAuthentication implements Authentication {
   async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(authentication.email)
     if (account) {
-      await this.hashComparer.compare(authentication.password, account.password)
+      const isValid = await this.hashComparer.compare(authentication.password, account.password)
+      if (isValid) {
+        return {
+          accessToken: 'any_token',
+          name: 'any_name'
+        }
+      }
     }
     return null
   }
