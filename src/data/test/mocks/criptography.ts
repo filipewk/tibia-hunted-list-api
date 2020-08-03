@@ -1,7 +1,7 @@
 import { Hasher } from '@/data/protocols/cryptography/hasher'
 import { HashComparer } from '@/data/protocols/cryptography/hasher-comparer'
-import faker from 'faker'
 import { Encrypter } from '@/data/protocols/cryptography/encrypter'
+import faker from 'faker'
 
 export class HasherSpy implements Hasher {
   digest = faker.random.uuid()
