@@ -23,17 +23,36 @@ describe('Account Postgres Repository', () => {
     await User.destroy({ truncate: true })
   })
 
-  test('Should return an account on success', async () => {
-    const sut = makeSut()
-    const dbAccount = await sut.add({
-      name: account.name,
-      email: account.email,
-      password: account.password
+  describe('add()', () => {
+    test('Should return an account on success', async () => {
+      const sut = makeSut()
+      const dbAccount = await sut.add({
+        name: account.name,
+        email: account.email,
+        password: account.password
+      })
+      expect(dbAccount).toBeTruthy()
+      expect(dbAccount.id).toBeTruthy()
+      expect(dbAccount.name).toBe(account.name)
+      expect(dbAccount.email).toBe(account.email)
+      expect(dbAccount.password).toBe(account.password)
     })
-    expect(dbAccount).toBeTruthy()
-    expect(dbAccount.id).toBeTruthy()
-    expect(dbAccount.name).toBe(account.name)
-    expect(dbAccount.email).toBe(account.email)
-    expect(dbAccount.password).toBe(account.password)
+  })
+
+  describe('loadByEmail()', () => {
+    test('Should return an account on success', async () => {
+      const sut = makeSut()
+      await sut.add({
+        name: account.name,
+        email: account.email,
+        password: account.password
+      })
+      const dbAccount = await sut.loadByEmail(account.email)
+      expect(dbAccount).toBeTruthy()
+      expect(dbAccount.id).toBeTruthy()
+      expect(dbAccount.name).toBe(account.name)
+      expect(dbAccount.email).toBe(account.email)
+      expect(dbAccount.password).toBe(account.password)
+    })
   })
 })
