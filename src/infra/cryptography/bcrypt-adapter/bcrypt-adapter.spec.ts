@@ -5,6 +5,10 @@ import faker from 'faker'
 jest.mock('bcrypt', () => ({
   async hash (): Promise<string> {
     return Promise.resolve('hash')
+  },
+
+  async compare (): Promise<boolean> {
+    return Promise.resolve(true)
   }
 }))
 
@@ -35,6 +39,15 @@ describe('Bcrypt Adapter', () => {
       jest.spyOn(bcrypt, 'hash').mockRejectedValueOnce(new Error())
       const promise = sut.hash(valueToHash)
       await expect(promise).rejects.toThrow()
+    })
+  })
+
+  describe('compare()', () => {
+    test('Should call comparer with correct values', async () => {
+      const sut = makeSut()
+      const compareSpy = jest.spyOn(bcrypt, 'compare')
+      await sut.compare(valueToHash, 'any_hash')
+      expect(compareSpy).toHaveBeenCalledWith(valueToHash, 'any_hash')
     })
   })
 })
