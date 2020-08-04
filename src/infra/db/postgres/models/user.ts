@@ -11,6 +11,7 @@ class User extends Model<AccountModel, UserCreationAttributes> implements Accoun
   public email!: string
   public password!: string
   public role?: string
+  public accessToken?: string
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -36,6 +37,10 @@ User.init(
       allowNull: false
     },
     role: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    accessToken: {
       type: Sequelize.STRING,
       allowNull: true
     }
