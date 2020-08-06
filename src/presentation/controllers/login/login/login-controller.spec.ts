@@ -13,9 +13,20 @@ const mockRequest = (): HttpRequest => ({
   }
 })
 
+type SutTypes = {
+  sut: LoginControler
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new LoginControler()
+  return {
+    sut
+  }
+}
+
 describe('Login Controller', () => {
   test('Should return 400 if no email is provided', async () => {
-    const sut = new LoginControler()
+    const { sut } = makeSut()
     const httpRequest = mockRequest()
     httpRequest.body.email = null
     const authenticationModel = await sut.handle(httpRequest)
@@ -23,7 +34,7 @@ describe('Login Controller', () => {
   })
 
   test('Should return 400 if no password is provided', async () => {
-    const sut = new LoginControler()
+    const { sut } = makeSut()
     const httpRequest = mockRequest()
     httpRequest.body.password = null
     const authenticationModel = await sut.handle(httpRequest)
