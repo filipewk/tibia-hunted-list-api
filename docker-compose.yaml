@@ -8,17 +8,17 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./data:/data/db
+      - ./data:/var/lib/postgresql/data
 
   api:
     container_name: api-tibia
     image: node
-    working_dir: /usr/src/tibia-hunted-list
+    working_dir: /usr/src/tibia-hunted-list-api
     restart: always
-    command: bash -c "npm install --only=prod && npm install nodemon -D && npm run debug"
+    command: bash -c "npm install --only=prod && npm start"
     volumes:
-      - ./dist/:/usr/src/tibia-hunted-list/dist/
-      - ./package.json:/usr/src/tibia-hunted-list/package.json
+      - ./dist/:/usr/src/tibia-hunted-list-api/dist/
+      - ./package.json:/usr/src/tibia-hunted-list-api/package.json
     ports:
       - "5050:5050"
       - "9222:9222"
