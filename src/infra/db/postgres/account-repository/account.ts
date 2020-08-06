@@ -15,7 +15,7 @@ export class AccountPostgresRepository implements AddAccountRepository, LoadAcco
         email
       }
     })
-    return account
+    return await account
   }
 
   async updateAccessToken (id: string, token: string): Promise<void> {

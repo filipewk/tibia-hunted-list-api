@@ -9,7 +9,7 @@ export class HasherSpy implements Hasher {
 
   async hash (plaintext: string): Promise<string> {
     this.plaintext = plaintext
-    return Promise.resolve(this.digest)
+    return await Promise.resolve(this.digest)
   }
 }
 
@@ -21,7 +21,7 @@ export class HashComparerSpy implements HashComparer {
   async compare (plaintext: string, digest: string): Promise<boolean> {
     this.plaintext = plaintext
     this.digest = digest
-    return Promise.resolve(this.isValid)
+    return await Promise.resolve(this.isValid)
   }
 }
 
@@ -31,6 +31,6 @@ export class EncrypterSpy implements Encrypter {
 
   async encrypt (plaintext: string): Promise<string> {
     this.plaintext = plaintext
-    return Promise.resolve(this.ciphertext)
+    return await Promise.resolve(this.ciphertext)
   }
 }
