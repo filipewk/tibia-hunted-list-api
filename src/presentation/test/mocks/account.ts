@@ -5,7 +5,7 @@ import {
   AuthenticationModel,
   AuthenticationParams,
   AddAccount
-} from '@/presentation/controllers/signup-controller-protocols'
+} from '@/presentation/controllers/login/signup/signup-controller-protocols'
 import { EmailValidator } from '@/presentation/protocols'
 import { mockAccountModel } from '@/domain/test/mocks'
 import faker from 'faker'
