@@ -2,8 +2,8 @@ import { LoginControler } from './login-controller'
 import { HttpRequest } from './login-controller-protocols'
 import { mockAuthenticationParams } from '@/domain/test/mocks'
 import { badRequest, unauthorized, serverError, ok } from '@/presentation/helpers/http/http-helper'
-import { MissingParamError } from '@/presentation/errors'
-import { AuthenticationSpy } from '@/presentation/test/mocks'
+import { MissingParamError, InvalidParamError } from '@/presentation/errors'
+import { AuthenticationSpy, EmailValidatorSpy } from '@/presentation/test/mocks'
 
 const loginModel = mockAuthenticationParams()
 
@@ -17,14 +17,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: LoginControler
   authenticationSpy: AuthenticationSpy
+  emailValidatorSpy: EmailValidatorSpy
 }
 
 const makeSut = (): SutTypes => {
+  const emailValidatorSpy = new EmailValidatorSpy()
   const authenticationSpy = new AuthenticationSpy()
-  const sut = new LoginControler(authenticationSpy)
+  const sut = new LoginControler(authenticationSpy, emailValidatorSpy)
   return {
     sut,
-    authenticationSpy
+    authenticationSpy,
+    emailValidatorSpy
   }
 }
 
@@ -75,5 +78,12 @@ describe('Login Controller', () => {
     const { accessToken, name } = authenticationSpy.authenticationModel
     const authModel = await sut.handle(mockRequest())
     expect(authModel).toEqual(ok({ accessToken, name }))
+  })
+
+  test('Should return 400 if an invalid email is provided', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+    emailValidatorSpy.emailValidatorResult = false
+    const authenticationModel = await sut.handle(mockRequest())
+    expect(authenticationModel).toEqual(badRequest(new InvalidParamError('email')))
   })
 })
