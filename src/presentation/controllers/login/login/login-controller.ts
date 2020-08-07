@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
-import { badRequest, unauthorized, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, unauthorized, serverError, ok } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
 import { Authentication } from '../signup/signup-controller-protocols'
 
@@ -24,7 +24,7 @@ export class LoginControler implements Controller {
       if (!authenticationModel) {
         return unauthorized()
       }
-      return null
+      return ok(authenticationModel)
     } catch (error) {
       return serverError(error)
     }

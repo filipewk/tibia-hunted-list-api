@@ -1,7 +1,7 @@
 import { mockAuthenticationParams } from '@/domain/test/mocks'
 import { LoginControler } from './login-controller'
 import { HttpRequest } from '@/presentation/protocols'
-import { badRequest, unauthorized, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, unauthorized, serverError, ok } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
 import { AuthenticationSpy } from '@/presentation/test/mocks'
 
@@ -68,5 +68,12 @@ describe('Login Controller', () => {
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(new Error())
     const authModel = await sut.handle(mockRequest())
     expect(authModel).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 200 if valid credentials are provided', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const { accessToken, name } = authenticationSpy.authenticationModel
+    const authModel = await sut.handle(mockRequest())
+    expect(authModel).toEqual(ok({ accessToken, name }))
   })
 })
