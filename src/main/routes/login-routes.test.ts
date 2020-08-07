@@ -1,8 +1,9 @@
 import app from '@/main/config/app'
+import env from '@/main/config/env'
 import User from '@/infra/db/postgres/models/user'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
+import { hash } from 'bcrypt'
 import request from 'supertest'
-import env from '@/main/config/env'
 
 describe('SignUp Routes', () => {
   beforeAll(() => {
@@ -17,15 +18,35 @@ describe('SignUp Routes', () => {
     await User.destroy({ truncate: true })
   })
 
-  test('Should return an account on success', async () => {
-    await request(app)
-      .post('/api/signup')
-      .send({
+  describe('POST /signup', () => {
+    test('Should return an account on success', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Filipe',
+          email: 'filipewk@gmail.com',
+          password: '123456',
+          passwordConfirmation: '123456'
+        })
+        .expect(200)
+    })
+  })
+
+  describe('POST /login', () => {
+    test('Should return 200 on login', async () => {
+      const password = await hash('123456', 12)
+      await User.create({
         name: 'Filipe',
         email: 'filipewk@gmail.com',
-        password: '123456',
-        passwordConfirmation: '123456'
+        password
       })
-      .expect(200)
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'filipewk@gmail.com',
+          password: '123456'
+        })
+        .expect(200)
+    })
   })
 })
