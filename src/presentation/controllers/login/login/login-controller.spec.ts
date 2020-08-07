@@ -86,4 +86,11 @@ describe('Login Controller', () => {
     const authenticationModel = await sut.handle(mockRequest())
     expect(authenticationModel).toEqual(badRequest(new InvalidParamError('email')))
   })
+
+  test('Should call EmailValidator if correct email', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+    const emailSpy = jest.spyOn(emailValidatorSpy, 'isValid')
+    await sut.handle(mockRequest())
+    expect(emailSpy).toHaveBeenCalledWith(loginModel.email)
+  })
 })
