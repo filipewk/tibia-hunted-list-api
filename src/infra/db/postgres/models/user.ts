@@ -20,7 +20,7 @@ class User extends Model<AccountModel, UserCreationAttributes> implements Accoun
 User.init(
   {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
