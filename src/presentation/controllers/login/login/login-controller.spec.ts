@@ -93,4 +93,11 @@ describe('Login Controller', () => {
     await sut.handle(mockRequest())
     expect(emailSpy).toHaveBeenCalledWith(loginModel.email)
   })
+
+  test('Should return 500 if EmailValidator throws', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+    jest.spyOn(emailValidatorSpy, 'isValid').mockRejectedValueOnce(new Error())
+    const authModel = await sut.handle(mockRequest())
+    expect(authModel).toEqual(serverError(new Error()))
+  })
 })
