@@ -1,7 +1,7 @@
 import { mockAuthenticationParams } from '@/domain/test/mocks'
 import { LoginControler } from './login-controller'
 import { HttpRequest } from '@/presentation/protocols'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { badRequest, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
 import { AuthenticationSpy } from '@/presentation/test/mocks'
 
@@ -54,5 +54,13 @@ describe('Login Controller', () => {
       email: httpRequest.body.email,
       password: httpRequest.body.password
     })
+  })
+
+  test('Should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(null)
+    const httpRequest = mockRequest()
+    const authModel = await sut.handle(httpRequest)
+    expect(authModel).toEqual(unauthorized())
   })
 })

@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { badRequest, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
 import { Authentication } from '../signup/signup-controller-protocols'
 
@@ -16,10 +16,13 @@ export class LoginControler implements Controller {
         return badRequest(new MissingParamError(field))
       }
     }
-    await this.authentication.auth({
+    const authenticationModel = await this.authentication.auth({
       email,
       password
     })
+    if (!authenticationModel) {
+      return unauthorized()
+    }
     return null
   }
 }
