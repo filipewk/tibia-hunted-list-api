@@ -1,6 +1,6 @@
-import { mockAuthenticationParams } from '@/domain/test/mocks'
 import { LoginControler } from './login-controller'
-import { HttpRequest } from '@/presentation/protocols'
+import { HttpRequest } from './login-controller-protocols'
+import { mockAuthenticationParams } from '@/domain/test/mocks'
 import { badRequest, unauthorized, serverError, ok } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
 import { AuthenticationSpy } from '@/presentation/test/mocks'
