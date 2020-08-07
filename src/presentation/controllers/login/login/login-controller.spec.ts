@@ -3,6 +3,7 @@ import { LoginControler } from './login-controller'
 import { HttpRequest } from '@/presentation/protocols'
 import { badRequest } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
+import { AuthenticationSpy } from '@/presentation/test/mocks'
 
 const loginModel = mockAuthenticationParams()
 
@@ -15,12 +16,15 @@ const mockRequest = (): HttpRequest => ({
 
 type SutTypes = {
   sut: LoginControler
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new LoginControler()
+  const authenticationSpy = new AuthenticationSpy()
+  const sut = new LoginControler(authenticationSpy)
   return {
-    sut
+    sut,
+    authenticationSpy
   }
 }
 
@@ -39,5 +43,16 @@ describe('Login Controller', () => {
     httpRequest.body.password = null
     const authenticationModel = await sut.handle(httpRequest)
     expect(authenticationModel).toEqual(badRequest(new MissingParamError('password')))
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const authSpy = jest.spyOn(authenticationSpy, 'auth')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith({
+      email: httpRequest.body.email,
+      password: httpRequest.body.password
+    })
   })
 })
