@@ -4,8 +4,11 @@ import { badRequest } from '@/presentation/helpers/http/http-helper'
 
 export class AddCharacterController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.name) {
-      return badRequest(new MissingParamError('name'))
+    const requiredField = ['name', 'sex', 'vocation', 'level', 'world', 'residence', 'priority', 'status']
+    for (const field of requiredField) {
+      if (!httpRequest.body[field]) {
+        return badRequest(new MissingParamError(field))
+      }
     }
   }
 }

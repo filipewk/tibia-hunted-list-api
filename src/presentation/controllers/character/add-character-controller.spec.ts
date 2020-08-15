@@ -17,11 +17,16 @@ const mockRequest = (): HttpRequest => ({
 })
 
 describe('AddCharacter Controller', () => {
-  test('Should return 400 if no name is provided', async () => {
+  test('Should return 400 if no correct model is provided', async () => {
     const sut = new AddCharacterController()
     const httpRequest = mockRequest()
-    httpRequest.body.name = null
     const character = await sut.handle(httpRequest)
-    expect(character).toEqual(badRequest(new MissingParamError('name')))
+    const requiredField = ['name', 'sex', 'vocation', 'level', 'world', 'residence', 'priority', 'status']
+    for (const field of requiredField) {
+      httpRequest.body.field = null
+      if (!httpRequest.body[field]) {
+        expect(character).toEqual(badRequest(new MissingParamError(field)))
+      }
+    }
   })
 })
