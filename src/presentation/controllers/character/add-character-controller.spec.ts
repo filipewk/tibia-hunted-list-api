@@ -2,9 +2,8 @@ import { AddCharacterController } from './add-character-controller'
 import { HttpRequest } from './add-character-controller-protocols'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { AddCharacterSpy } from '@/presentation/test/mocks/character'
 import faker from 'faker'
-import { AddCharacter, AddCharacterParams } from '@/domain/usecases/character/add-character'
-import { CharacterModel } from '@/domain/models/character'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -19,22 +18,13 @@ const mockRequest = (): HttpRequest => ({
   }
 })
 
-const mockAddCharacterSpy = (): AddCharacter => {
-  class AddCharacterSpy implements AddCharacter {
-    async add (addCharacterParams: AddCharacterParams): Promise<CharacterModel> {
-      return null
-    }
-  }
-  return new AddCharacterSpy()
-}
-
 type SutTypes = {
   sut: AddCharacterController
-  addCharacterSpy: AddCharacter
+  addCharacterSpy: AddCharacterSpy
 }
 
 const makeSut = (): SutTypes => {
-  const addCharacterSpy = mockAddCharacterSpy()
+  const addCharacterSpy = new AddCharacterSpy()
   const sut = new AddCharacterController(addCharacterSpy)
   return {
     sut,
