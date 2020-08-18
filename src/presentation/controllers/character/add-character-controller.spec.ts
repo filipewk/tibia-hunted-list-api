@@ -1,7 +1,7 @@
 import { AddCharacterController } from './add-character-controller'
 import { HttpRequest } from './add-character-controller-protocols'
-import { MissingParamError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/helpers/http/http-helper'
+import { MissingParamError, ServerError } from '@/presentation/errors'
+import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 import { AddCharacterSpy } from '@/presentation/test/mocks/character'
 import faker from 'faker'
 
@@ -61,5 +61,13 @@ describe('AddCharacter Controller', () => {
       priority: httpRequest.body.priority,
       status: httpRequest.body.status
     })
+  })
+
+  test('Should return 500 if AddCharacter throws', async () => {
+    const { sut, addCharacterSpy } = makeSut()
+    jest.spyOn(addCharacterSpy, 'add').mockRejectedValueOnce(new Error())
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
