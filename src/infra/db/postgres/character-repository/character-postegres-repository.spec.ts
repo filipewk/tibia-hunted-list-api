@@ -21,6 +21,21 @@ describe('Account Postgres Repository', () => {
   })
 
   describe('add()', () => {
+    test('Should throw Error if tibia character does not exist', async () => {
+      const sut = makeSut()
+      const character = sut.add({
+        name: 'ff',
+        sex: 'female',
+        vocation: 'Elite Knight',
+        level: 100,
+        world: 'Duna',
+        residence: 'Edron',
+        priority: 1,
+        status: 'Premium Account'
+      })
+      await expect(character).rejects.toThrow()
+    })
+
     test('Should add character on success', async () => {
       const sut = makeSut()
       await sut.add({
