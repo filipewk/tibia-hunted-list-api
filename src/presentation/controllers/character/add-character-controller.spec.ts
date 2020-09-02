@@ -1,7 +1,7 @@
 import { AddCharacterController } from './add-character-controller'
 import { HttpRequest } from './add-character-controller-protocols'
 import { MissingParamError, ServerError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import { AddCharacterSpy } from '@/presentation/test/mocks/character'
 import faker from 'faker'
 
@@ -69,5 +69,12 @@ describe('AddCharacter Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(noContent())
   })
 })

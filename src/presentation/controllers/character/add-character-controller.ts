@@ -1,6 +1,6 @@
 import { Controller, HttpRequest, HttpResponse } from './add-character-controller-protocols'
 import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import { AddCharacter } from '@/domain/usecases/character/add-character'
 
 export class AddCharacterController implements Controller {
@@ -27,6 +27,7 @@ export class AddCharacterController implements Controller {
         priority,
         status
       })
+      return noContent()
     } catch (error) {
       return serverError(error.stack)
     }
