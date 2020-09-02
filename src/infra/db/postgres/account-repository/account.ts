@@ -1,7 +1,7 @@
 import { AddAccountRepository, AddAccountParams, LoadAccountByEmailRepository } from '@/data/usecases/account/add-account/db-add-account-protocols'
 import User from '@/infra/db/postgres/models/user'
 import { AccountModel } from '@/domain/models/account'
-import { UpdateAccessTokenRepository } from '@/data/protocols/db/update-access-token-repository'
+import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
 
 export class AccountPostgresRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
   async add (data: AddAccountParams): Promise<AccountModel> {
