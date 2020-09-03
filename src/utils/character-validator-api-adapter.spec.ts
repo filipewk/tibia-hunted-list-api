@@ -1,8 +1,8 @@
-import { CharacterValidatorAdapter } from './character-validator'
+import { CharacterValidatorApiAdapter } from './character-validator-api-adapter'
 import { mockAddCharacterParams } from '@/domain/test/mocks/character'
 
-const makeSut = (): CharacterValidatorAdapter => {
-  const sut = new CharacterValidatorAdapter()
+const makeSut = (): CharacterValidatorApiAdapter => {
+  const sut = new CharacterValidatorApiAdapter()
   return sut
 }
 
@@ -11,7 +11,7 @@ describe('CharacterValidator Adapter', () => {
     const sut = makeSut()
     const character = mockAddCharacterParams()
     character.name = 'ff'
-    const isValid = await sut.isValid(character)
+    const isValid = await sut.isValid(character.name)
     expect(isValid).toBe(false)
   })
 })

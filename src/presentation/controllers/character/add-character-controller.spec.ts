@@ -4,6 +4,7 @@ import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import { AddCharacterSpy } from '@/presentation/test/mocks/character'
 import faker from 'faker'
+import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -21,14 +22,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: AddCharacterController
   addCharacterSpy: AddCharacterSpy
+  characterValidatorApi: CharacterValidatorApiAdapter
 }
 
 const makeSut = (): SutTypes => {
   const addCharacterSpy = new AddCharacterSpy()
-  const sut = new AddCharacterController(addCharacterSpy)
+  const characterValidatorApi = new CharacterValidatorApiAdapter()
+  const sut = new AddCharacterController(addCharacterSpy, characterValidatorApi)
   return {
     sut,
-    addCharacterSpy
+    addCharacterSpy,
+    characterValidatorApi
   }
 }
 
@@ -69,6 +73,14 @@ describe('AddCharacter Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should call CharacterValidatorApi with a same name of request', async () => {
+    const { sut, characterValidatorApi } = makeSut()
+    const characterSpy = jest.spyOn(characterValidatorApi, 'isValid')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.name)
   })
 
   test('Should return 204 on success', async () => {
