@@ -3,12 +3,12 @@ import { HttpRequest } from './add-character-controller-protocols'
 import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import { AddCharacterSpy } from '@/presentation/test/mocks/character'
-import faker from 'faker'
 import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
+import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-exist-error'
 
 const mockRequest = (): HttpRequest => ({
   body: {
-    name: faker.internet.userName(),
+    name: 'On Rails',
     sex: 'any_sex',
     vocation: 'any_vocation',
     level: 50,
@@ -73,6 +73,22 @@ describe('AddCharacter Controller', () => {
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should call CharacterValidatorApi with a same name of request', async () => {
+    const { sut, characterValidatorApi } = makeSut()
+    const characterSpy = jest.spyOn(characterValidatorApi, 'isValid')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.name)
+  })
+
+  test('Should return 400 if an invalid character is provided', async () => {
+    const { sut, characterValidatorApi } = makeSut()
+    jest.spyOn(characterValidatorApi, 'isValid').mockReturnValueOnce(Promise.resolve(false))
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new CharacterDoesNotExist()))
   })
 
   test('Should call CharacterValidatorApi with a same name of request', async () => {

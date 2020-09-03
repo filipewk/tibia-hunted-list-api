@@ -3,6 +3,7 @@ import { MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import { AddCharacter } from '@/domain/usecases/character/add-character'
 import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
+import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-exist-error'
 
 export class AddCharacterController implements Controller {
   constructor (
@@ -19,7 +20,10 @@ export class AddCharacterController implements Controller {
           return badRequest(new MissingParamError(field))
         }
       }
-      await this.characterApiValidator.isValid(name)
+      const isValidCharacter = await this.characterApiValidator.isValid(name)
+      if (!isValidCharacter) {
+        return badRequest(new CharacterDoesNotExist())
+      }
       await this.addCharacter.add({
         name,
         sex,
