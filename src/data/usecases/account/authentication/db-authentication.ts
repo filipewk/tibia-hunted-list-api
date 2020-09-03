@@ -3,7 +3,7 @@ import { AuthenticationModel } from '@/domain/models/authentication'
 import { LoadAccountByEmailRepository } from '../add-account/db-add-account-protocols'
 import { HashComparer } from '@/data/protocols/cryptography/hasher-comparer'
 import { Encrypter } from '@/data/protocols/cryptography/encrypter'
-import { UpdateAccessTokenRepository } from '@/data/protocols/db/update-access-token-repository'
+import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/update-access-token-repository'
 
 export class DbAuthentication implements Authentication {
   constructor (
