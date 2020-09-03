@@ -6,7 +6,7 @@ export class DbAddCharacter implements AddCharacterRepository {
     private readonly addCharacterRepository: AddCharacterRepository
   ) {}
 
-  async add (character: AddCharacterParams): Promise<void> {
-    await this.addCharacterRepository.add(character)
+  async add (characterData: AddCharacterParams): Promise<void> {
+    await this.addCharacterRepository.add(characterData)
   }
 }
