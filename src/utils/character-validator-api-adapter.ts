@@ -9,5 +9,6 @@ export class CharacterValidatorApiAdapter implements CharacterValidator {
     const url = `https://api.tibiadata.com/v2/characters/${name}.json`
     const tibiaDataApi = await axios.get(url)
     return !tibiaDataApi.data.characters.error
+    // TODO fazer retornar todos os dados validados
   }
 }
