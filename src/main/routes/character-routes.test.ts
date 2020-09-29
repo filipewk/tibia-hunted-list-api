@@ -22,14 +22,8 @@ describe('Character Routes', () => {
       await request(app)
         .post('/api/characters')
         .send({
-          name: 'On Rails',
-          sex: 'male',
-          vocation: 'Elite Knight',
-          level: 50,
-          world: 'Duna',
-          residence: 'Edron',
-          priority: 1,
-          status: 'Premium Account'
+          character: 'On Rails',
+          priority: 1
         })
         .expect(204)
     })
