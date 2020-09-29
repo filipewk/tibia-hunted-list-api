@@ -14,4 +14,12 @@ describe('CharacterValidator Adapter', () => {
     const isValid = await sut.isValid(character.name)
     expect(isValid).toBe(false)
   })
+
+  test('Should return character data if character exist', async () => {
+    const sut = makeSut()
+    const character = mockAddCharacterParams()
+    character.name = 'On Rails'
+    const isValid = await sut.isValid(character.name)
+    expect(isValid).toBeTruthy()
+  })
 })

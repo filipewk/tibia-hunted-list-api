@@ -20,8 +20,8 @@ export class AddCharacterController implements Controller {
           return badRequest(new MissingParamError(field))
         }
       }
-      const isValidCharacter = await this.characterApiValidator.isValid(name)
-      if (!isValidCharacter) {
+      const tibiaDataApi = await this.characterApiValidator.isValid(name)
+      if (!tibiaDataApi) {
         return badRequest(new CharacterDoesNotExist())
       }
       await this.addCharacter.add({
