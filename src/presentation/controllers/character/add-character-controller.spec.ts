@@ -8,14 +8,8 @@ import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-
 
 const mockRequest = (): HttpRequest => ({
   body: {
-    name: 'On Rails',
-    sex: 'any_sex',
-    vocation: 'any_vocation',
-    level: 50,
-    world: 'any_world',
-    residence: 'any_residence',
-    priority: 1,
-    status: 'any_status'
+    character: 'On Rails',
+    priority: 1
   }
 })
 
@@ -41,7 +35,7 @@ describe('AddCharacter Controller', () => {
     const { sut } = makeSut()
     const httpRequest = mockRequest()
     const character = await sut.handle(httpRequest)
-    const requiredField = ['name', 'sex', 'vocation', 'level', 'world', 'residence', 'priority', 'status']
+    const requiredField = ['character', 'priority']
     for (const field of requiredField) {
       httpRequest.body.field = null
       if (!httpRequest.body[field]) {
@@ -51,19 +45,20 @@ describe('AddCharacter Controller', () => {
   })
 
   test('Should call AddCharacter with correct params', async () => {
-    const { sut, addCharacterSpy } = makeSut()
+    const { sut, addCharacterSpy, characterValidatorApi } = makeSut()
     const addSpy = jest.spyOn(addCharacterSpy, 'add')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
+    const characterData = await characterValidatorApi.isValid(httpRequest.body.character)
     expect(addSpy).toHaveBeenCalledWith({
-      name: httpRequest.body.name,
-      sex: httpRequest.body.sex,
-      vocation: httpRequest.body.vocation,
-      level: httpRequest.body.level,
-      world: httpRequest.body.world,
-      residence: httpRequest.body.residence,
+      name: characterData.name,
+      sex: characterData.sex,
+      vocation: characterData.vocation,
+      level: characterData.level,
+      world: characterData.world,
+      residence: characterData.residence,
       priority: httpRequest.body.priority,
-      status: httpRequest.body.status
+      status: characterData.account_status
     })
   })
 
@@ -80,7 +75,7 @@ describe('AddCharacter Controller', () => {
     const characterSpy = jest.spyOn(characterValidatorApi, 'isValid')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.name)
+    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.character)
   })
 
   test('Should return 400 if an invalid character is provided', async () => {
@@ -96,7 +91,7 @@ describe('AddCharacter Controller', () => {
     const characterSpy = jest.spyOn(characterValidatorApi, 'isValid')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.name)
+    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.character)
   })
 
   test('Should return 204 on success', async () => {

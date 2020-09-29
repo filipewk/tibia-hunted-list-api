@@ -13,17 +13,18 @@ export class AddCharacterController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { name, sex, vocation, level, world, residence, priority, status } = httpRequest.body
-      const requiredField = ['name', 'sex', 'vocation', 'level', 'world', 'residence', 'priority', 'status']
+      const { character, priority } = httpRequest.body
+      const requiredField = ['character', 'priority']
       for (const field of requiredField) {
         if (!httpRequest.body[field]) {
           return badRequest(new MissingParamError(field))
         }
       }
-      const tibiaDataApi = await this.characterApiValidator.isValid(name)
+      const tibiaDataApi = await this.characterApiValidator.isValid(character)
       if (!tibiaDataApi) {
         return badRequest(new CharacterDoesNotExist())
       }
+      const { name, sex, vocation, level, world, residence } = tibiaDataApi
       await this.addCharacter.add({
         name,
         sex,
@@ -32,7 +33,7 @@ export class AddCharacterController implements Controller {
         world,
         residence,
         priority,
-        status
+        status: tibiaDataApi.account_status
       })
       return noContent()
     } catch (error) {
