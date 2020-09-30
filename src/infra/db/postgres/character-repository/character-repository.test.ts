@@ -1,8 +1,10 @@
 import { CharacterPostgresRepository } from './character-repository'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
-import Character from '../models/character'
 import env from '@/main/config/env'
-import { mockAddCharacterParams } from '@/domain/test/mocks/character'
+import { mockAddCharacterParams, mockCharacterModel } from '@/domain/test/mocks/character'
+import Character from '../models/character'
+
+const character = mockCharacterModel()
 
 const makeSut = (): CharacterPostgresRepository => {
   return new CharacterPostgresRepository()
@@ -55,6 +57,12 @@ describe('Account Postgres Repository', () => {
       expect(dbCharacter.status).toBe(addCharacterParams.status)
       expect(dbCharacter.vocation).toBe(addCharacterParams.vocation)
       expect(dbCharacter.world).toBe(addCharacterParams.world)
+    })
+
+    test('Should return null with LoadByName fails', async () => {
+      const sut = makeSut()
+      const dbCharacter = await sut.loadByName(character.name)
+      expect(dbCharacter).toBeFalsy()
     })
   })
 })
