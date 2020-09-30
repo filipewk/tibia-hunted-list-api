@@ -26,7 +26,6 @@ export class AddCharacterController implements Controller {
         return badRequest(new CharacterDoesNotExist())
       }
       const { name, sex, vocation, level, world, residence } = tibiaDataApi
-
       const characterData = await this.addCharacter.add({
         name,
         sex,
@@ -37,7 +36,6 @@ export class AddCharacterController implements Controller {
         priority,
         status: tibiaDataApi.account_status
       })
-      console.log('dentro', characterData)
       if (!characterData) {
         return forbidden(new CharacterAlreadyAdded())
       }

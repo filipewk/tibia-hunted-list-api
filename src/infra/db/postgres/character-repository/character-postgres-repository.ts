@@ -11,11 +11,11 @@ export class CharacterPostgresRepository implements AddCharacterRepository, Load
   }
 
   async loadByName (character: string): Promise<CharacterModel> {
-    const characterData = Character.findOne({
+    const characterData = await Character.findOne({
       where: {
         name: character
       }
     })
-    return await characterData
+    return characterData
   }
 }

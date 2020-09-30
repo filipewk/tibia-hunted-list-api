@@ -12,8 +12,8 @@ export class DbAddCharacter implements AddCharacter {
   async add (character: AddCharacterParams): Promise<CharacterModel> {
     const characterData = await this.loadCharacterByNameRepository.loadByName(character.name)
     if (!characterData) {
-      await this.addCharacterRepository.add(character)
-      return characterData
+      const newCharacter = await this.addCharacterRepository.add(character)
+      return newCharacter
     }
     return null
   }
