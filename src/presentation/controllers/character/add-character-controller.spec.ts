@@ -32,17 +32,20 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AddCharacter Controller', () => {
-  test('Should return 400 if no correct model is provided', async () => {
+  test('Should return 400 if no correct character is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = mockRequest()
+    httpRequest.body.character = null
     const character = await sut.handle(httpRequest)
-    const requiredField = ['character', 'priority']
-    for (const field of requiredField) {
-      httpRequest.body.field = null
-      if (!httpRequest.body[field]) {
-        expect(character).toEqual(badRequest(new MissingParamError(field)))
-      }
-    }
+    expect(character).toEqual(badRequest(new MissingParamError('character')))
+  })
+
+  test('Should return 400 if no correct priority is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    httpRequest.body.priority = null
+    const character = await sut.handle(httpRequest)
+    expect(character).toEqual(badRequest(new MissingParamError('priority')))
   })
 
   test('Should call AddCharacter with correct params', async () => {
