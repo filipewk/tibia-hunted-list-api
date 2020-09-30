@@ -52,4 +52,12 @@ describe('DbAddCharacter UseCase', () => {
     await sut.add(addCharacterParams)
     expect(loadCharacterByNameRepositorySpy.character).toBe(addCharacterParams.name)
   })
+
+  test('Should throw if LoadCharacterByNameRepository throws', async () => {
+    const { sut, loadCharacterByNameRepositorySpy } = makeSut()
+    jest.spyOn(loadCharacterByNameRepositorySpy, 'loadByName').mockRejectedValueOnce(new Error())
+    const addCharacterParams = mockAddCharacterParams()
+    const promise = sut.add(addCharacterParams)
+    await expect(promise).rejects.toThrow()
+  })
 })
