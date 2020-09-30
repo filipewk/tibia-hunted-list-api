@@ -1,4 +1,4 @@
-import { CharacterPostgresRepository } from './character-postgres-repository'
+import { CharacterPostgresRepository } from './character-repository'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
 import Character from '../models/character'
 import env from '@/main/config/env'

@@ -1,5 +1,5 @@
 import { AddCharacter } from '@/domain/usecases/character/add-character'
-import { CharacterPostgresRepository } from '@/infra/db/postgres/character-repository/character-postgres-repository'
+import { CharacterPostgresRepository } from '@/infra/db/postgres/character-repository/character-repository'
 import { DbAddCharacter } from '@/data/usecases/character/db-add-character'
 
 export const makeDbAddCharacter = (): AddCharacter => {
