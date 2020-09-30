@@ -1,9 +1,10 @@
 import { Controller, HttpRequest, HttpResponse } from './add-character-controller-protocols'
 import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError, noContent, forbidden } from '@/presentation/helpers/http/http-helper'
 import { AddCharacter } from '@/domain/usecases/character/add-character'
 import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
 import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-exist-error'
+import { CharacterAlreadyAdded } from '@/presentation/errors/character-already-added'
 
 export class AddCharacterController implements Controller {
   constructor (
@@ -25,7 +26,8 @@ export class AddCharacterController implements Controller {
         return badRequest(new CharacterDoesNotExist())
       }
       const { name, sex, vocation, level, world, residence } = tibiaDataApi
-      await this.addCharacter.add({
+
+      const characterData = await this.addCharacter.add({
         name,
         sex,
         vocation,
@@ -35,6 +37,10 @@ export class AddCharacterController implements Controller {
         priority,
         status: tibiaDataApi.account_status
       })
+      console.log('dentro', characterData)
+      if (!characterData) {
+        return forbidden(new CharacterAlreadyAdded())
+      }
       return noContent()
     } catch (error) {
       return serverError(error.stack)
