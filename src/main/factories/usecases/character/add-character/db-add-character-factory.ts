@@ -4,5 +4,5 @@ import { DbAddCharacter } from '@/data/usecases/character/db-add-character'
 
 export const makeDbAddCharacter = (): AddCharacter => {
   const characterPostegresRepository = new CharacterPostgresRepository()
-  return new DbAddCharacter(characterPostegresRepository)
+  return new DbAddCharacter(characterPostegresRepository, characterPostegresRepository)
 }

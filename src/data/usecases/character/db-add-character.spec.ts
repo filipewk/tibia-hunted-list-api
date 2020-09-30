@@ -1,19 +1,23 @@
 import { DbAddCharacter } from './db-add-character'
 import { AddCharacterRepository } from '@/data/protocols/db/character/add-character-repository'
-import { mockAddCharacterRepository } from '@/data/test/mocks/db-character'
-import { mockAddCharacterParams } from '@/domain/test/mocks/character'
+import { LoadCharacterByNameRepositorySpy, mockAddCharacterRepository } from '@/data/test/mocks/db-character'
+import { mockAddCharacterParams, mockCharacterModel } from '@/domain/test/mocks/character'
 
 type SutTypes = {
   sut: DbAddCharacter
   addCharacterRepositoryStub: AddCharacterRepository
+  loadCharacterByNameRepositorySpy: LoadCharacterByNameRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const addCharacterRepositoryStub = mockAddCharacterRepository()
-  const sut = new DbAddCharacter(addCharacterRepositoryStub)
+  const loadCharacterByNameRepositorySpy = new LoadCharacterByNameRepositorySpy()
+  loadCharacterByNameRepositorySpy.characterModel = null
+  const sut = new DbAddCharacter(addCharacterRepositoryStub, loadCharacterByNameRepositorySpy)
   return {
     sut,
-    addCharacterRepositoryStub
+    addCharacterRepositoryStub,
+    loadCharacterByNameRepositorySpy
   }
 }
 
@@ -32,5 +36,13 @@ describe('DbAddCharacter UseCase', () => {
     const characterParams = mockAddCharacterParams()
     const promise = sut.add(characterParams)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return null if LoadCharacterByNameRepository not returns null', async () => {
+    const { sut, loadCharacterByNameRepositorySpy } = makeSut()
+    loadCharacterByNameRepositorySpy.characterModel = mockCharacterModel()
+    const addCharacterParams = mockAddCharacterParams()
+    const character = await sut.add(addCharacterParams)
+    expect(character).toBeNull()
   })
 })
