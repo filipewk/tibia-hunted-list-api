@@ -45,4 +45,11 @@ describe('DbAddCharacter UseCase', () => {
     const character = await sut.add(addCharacterParams)
     expect(character).toBeNull()
   })
+
+  test('Should call LoadCharacterByNameRepository with correct name', async () => {
+    const { sut, loadCharacterByNameRepositorySpy } = makeSut()
+    const addCharacterParams = mockAddCharacterParams()
+    await sut.add(addCharacterParams)
+    expect(loadCharacterByNameRepositorySpy.character).toBe(addCharacterParams.name)
+  })
 })
