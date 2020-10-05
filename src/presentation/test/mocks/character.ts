@@ -12,11 +12,10 @@ export class AddCharacterSpy implements AddCharacter {
   }
 }
 
-export const mockLoadCharacters = (): LoadCharacters => {
-  class LoadCharactersStub implements LoadCharacters {
-    async load (): Promise<CharacterModel> {
-      return mockCharacterModel()
-    }
+export class LoadCharactersSpy implements LoadCharacters {
+  characterModel = mockCharacterModel()
+
+  async load (): Promise<CharacterModel> {
+    return this.characterModel
   }
-  return new LoadCharactersStub()
 }
