@@ -1,5 +1,5 @@
 import { ServerError } from '@/presentation/errors'
-import { ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { LoadCharactersSpy } from '@/presentation/test/mocks/character'
 import { LoadCharactersController } from './load-characters-controller'
 
@@ -29,6 +29,13 @@ describe('LoadCharacters Controller', () => {
     const { sut, loadCharactersStub } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(loadCharactersStub.characterModel))
+  })
+
+  test('Should 204 if LoadCharacters return empty', async () => {
+    const { sut, loadCharactersStub } = makeSut()
+    jest.spyOn(loadCharactersStub, 'load').mockReturnValueOnce(Promise.resolve([]))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(noContent())
   })
 
   test('hould return 500 if LoadCharacters throw', async () => {

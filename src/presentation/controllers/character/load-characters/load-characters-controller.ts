@@ -1,6 +1,6 @@
 import { LoadCharacters } from '@/domain/usecases/character/load-characters'
 import { ServerError } from '@/presentation/errors'
-import { ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '../../login/login/login-controller-protocols'
 
 export class LoadCharactersController implements Controller {
@@ -9,7 +9,7 @@ export class LoadCharactersController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const characters = await this.loadCharacters.load()
-      return ok(characters)
+      return characters.length ? ok(characters) : noContent()
     } catch (error) {
       return serverError(new ServerError(error.stack))
     }
