@@ -1,8 +1,8 @@
 import { CharacterPostgresRepository } from './character-repository'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
-import env from '@/main/config/env'
 import { mockAddCharacterParams, mockCharacterModel } from '@/domain/test/mocks/character'
 import Character from '../models/character'
+import env from '@/main/config/env'
 
 const character = mockCharacterModel()
 
@@ -63,6 +63,38 @@ describe('Account Postgres Repository', () => {
       const sut = makeSut()
       const dbCharacter = await sut.loadByName(character.name)
       expect(dbCharacter).toBeFalsy()
+    })
+  })
+
+  describe('loadAll()', () => {
+    test('Should load all characters on success', async () => {
+      const sut = makeSut()
+      await Character.create({
+        name: 'Teste1',
+        sex: 'male',
+        vocation: 'Elite Knight',
+        level: 50,
+        world: 'Duna',
+        residence: 'Edron',
+        priority: 1,
+        status: 'Premium Account'
+      })
+      await Character.create({
+        name: 'Teste2',
+        sex: 'male',
+        vocation: 'Elite Knight',
+        level: 50,
+        world: 'Duna',
+        residence: 'Edron',
+        priority: 1,
+        status: 'Premium Account'
+      })
+      const characters = await sut.loadAll()
+      expect(characters.length).toBe(2)
+      expect(characters[0].id).toBeTruthy()
+      expect(characters[1].id).toBeTruthy()
+      expect(characters[0].name).toBe('Teste1')
+      expect(characters[1].name).toBe('Teste2')
     })
   })
 })
