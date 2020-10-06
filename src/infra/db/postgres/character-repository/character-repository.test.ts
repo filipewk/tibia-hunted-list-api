@@ -96,5 +96,11 @@ describe('Account Postgres Repository', () => {
       expect(characters[0].name).toBe('Teste1')
       expect(characters[1].name).toBe('Teste2')
     })
+
+    test('Should load empty list', async () => {
+      const sut = makeSut()
+      const characters = await sut.loadAll()
+      expect(characters.length).toBe(0)
+    })
   })
 })
