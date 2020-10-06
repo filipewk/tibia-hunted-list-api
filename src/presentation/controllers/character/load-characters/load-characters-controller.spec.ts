@@ -1,7 +1,7 @@
+import { LoadCharactersController } from './load-characters-controller'
 import { ServerError } from '@/presentation/errors'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { LoadCharactersSpy } from '@/presentation/test/mocks/character'
-import { LoadCharactersController } from './load-characters-controller'
 
 type SutTypes = {
   sut: LoadCharactersController
