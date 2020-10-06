@@ -28,4 +28,11 @@ describe('DbLoadCharacters Usecase', () => {
     const characters = await sut.load()
     expect(characters).toBe(loadCharactersRepositoryStub.characterModel)
   })
+
+  test('Should throw if LoadCharactersRepository throws', async () => {
+    const { sut, loadCharactersRepositoryStub } = makeSut()
+    jest.spyOn(loadCharactersRepositoryStub, 'loadAll').mockRejectedValueOnce(new Error())
+    const promise = sut.load()
+    await expect(promise).rejects.toThrow()
+  })
 })
