@@ -25,7 +25,7 @@ describe('LoadCharacters Controller', () => {
     expect(loadSpy).toHaveBeenCalled()
   })
 
-  test('hould return 200 on success', async () => {
+  test('Should return 200 on success', async () => {
     const { sut, loadCharactersStub } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(loadCharactersStub.characterModel))
@@ -38,7 +38,7 @@ describe('LoadCharacters Controller', () => {
     expect(httpResponse).toEqual(noContent())
   })
 
-  test('hould return 500 if LoadCharacters throw', async () => {
+  test('Should return 500 if LoadCharacters throw', async () => {
     const { sut, loadCharactersStub } = makeSut()
     jest.spyOn(loadCharactersStub, 'load').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle({})

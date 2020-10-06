@@ -1,6 +1,7 @@
 import { CharacterModel } from '@/domain/models/character'
 import { mockCharacterModel, mockCharacterModels } from '@/domain/test/mocks/character'
 import { AddCharacterParams, AddCharacter } from '@/domain/usecases/character/add-character'
+import { RemoveCharacter } from '@/domain/usecases/character/delete-character'
 import { LoadCharacters } from '@/domain/usecases/character/load-characters'
 
 export class AddCharacterSpy implements AddCharacter {
@@ -17,5 +18,13 @@ export class LoadCharactersSpy implements LoadCharacters {
 
   async load (): Promise<CharacterModel[]> {
     return this.characterModel
+  }
+}
+
+export class RemoveCharacterSpy implements RemoveCharacter {
+  characterId: string
+
+  async remove (id: string): Promise<void> {
+    this.characterId = id
   }
 }
