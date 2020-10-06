@@ -22,4 +22,10 @@ describe('DbLoadCharacters Usecase', () => {
     await sut.load()
     expect(loadSpy).toHaveBeenCalled()
   })
+
+  test('Should return a character-list on success', async () => {
+    const { sut, loadCharactersRepositoryStub } = makeSut()
+    const characters = await sut.load()
+    expect(characters).toBe(loadCharactersRepositoryStub.characterModel)
+  })
 })

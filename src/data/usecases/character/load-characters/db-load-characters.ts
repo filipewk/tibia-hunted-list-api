@@ -6,7 +6,7 @@ export class DbLoadCharacters implements LoadCharacters {
   constructor (private readonly loadCharactersRepository: LoadCharactersRepository) {}
 
   async load (): Promise<CharacterModel> {
-    await this.loadCharactersRepository.loadAll()
-    return null
+    const characters = await this.loadCharactersRepository.loadAll()
+    return characters
   }
 }
