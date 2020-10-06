@@ -1,4 +1,5 @@
-import { ok } from '@/presentation/helpers/http/http-helper'
+import { ServerError } from '@/presentation/errors'
+import { ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { LoadCharactersSpy } from '@/presentation/test/mocks/character'
 import { LoadCharactersController } from './load-characters-controller'
 
@@ -16,8 +17,6 @@ const makeSut = (): SutTypes => {
   }
 }
 
-// TODO 200 204 throw 500
-
 describe('LoadCharacters Controller', () => {
   test('Should call LoadCharacters', async () => {
     const { sut, loadCharactersStub } = makeSut()
@@ -30,5 +29,12 @@ describe('LoadCharacters Controller', () => {
     const { sut, loadCharactersStub } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(loadCharactersStub.characterModel))
+  })
+
+  test('hould return 500 if LoadCharacters throw', async () => {
+    const { sut, loadCharactersStub } = makeSut()
+    jest.spyOn(loadCharactersStub, 'load').mockRejectedValueOnce(new Error())
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
