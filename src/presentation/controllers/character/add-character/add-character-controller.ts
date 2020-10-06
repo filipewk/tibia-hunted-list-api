@@ -1,10 +1,8 @@
 import { Controller, HttpRequest, HttpResponse } from './add-character-controller-protocols'
-import { MissingParamError } from '@/presentation/errors'
+import { MissingParamError, CharacterDoesNotExist, CharacterAlreadyAdded } from '@/presentation/errors'
 import { badRequest, serverError, noContent, forbidden } from '@/presentation/helpers/http/http-helper'
 import { AddCharacter } from '@/domain/usecases/character/add-character'
 import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
-import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-exist-error'
-import { CharacterAlreadyAdded } from '@/presentation/errors/character-already-added'
 
 export class AddCharacterController implements Controller {
   constructor (

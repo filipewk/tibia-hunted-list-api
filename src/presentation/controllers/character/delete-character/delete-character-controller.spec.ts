@@ -1,8 +1,7 @@
+import { RemoveCharacterController } from './delete-character-controller'
+import { HttpRequest, RemoveCharacterSpy } from './delete-character-controller-protocols'
 import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { RemoveCharacterSpy } from '@/presentation/test/mocks/character'
-import { HttpRequest } from '../../login/login/login-controller-protocols'
-import { RemoveCharacterController } from './delete-character-controller'
 
 const mockRequest = (): HttpRequest => ({
   params: {

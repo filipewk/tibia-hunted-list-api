@@ -1,7 +1,7 @@
-import { RemoveCharacter } from '@/domain/usecases/character/delete-character'
+import { Controller, HttpRequest, HttpResponse } from './delete-character-controller-protocols'
 import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '../../login/login/login-controller-protocols'
+import { RemoveCharacter } from '@/domain/usecases/character/delete-character'
 
 export class RemoveCharacterController implements Controller {
   constructor (

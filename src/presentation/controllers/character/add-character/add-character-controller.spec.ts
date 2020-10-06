@@ -1,11 +1,7 @@
 import { AddCharacterController } from './add-character-controller'
-import { HttpRequest } from './add-character-controller-protocols'
-import { MissingParamError, ServerError } from '@/presentation/errors'
+import { HttpRequest, AddCharacterSpy, CharacterValidatorApiAdapter } from './add-character-controller-protocols'
+import { MissingParamError, ServerError, CharacterDoesNotExist, CharacterAlreadyAdded } from '@/presentation/errors'
 import { badRequest, serverError, noContent, forbidden } from '@/presentation/helpers/http/http-helper'
-import { CharacterDoesNotExist } from '@/presentation/errors/character-does-not-exist-error'
-import { CharacterAlreadyAdded } from '@/presentation/errors/character-already-added'
-import { AddCharacterSpy } from '@/presentation/test/mocks/character'
-import { CharacterValidatorApiAdapter } from '@/utils/character-validator-api-adapter'
 
 const mockRequest = (): HttpRequest => ({
   body: {
