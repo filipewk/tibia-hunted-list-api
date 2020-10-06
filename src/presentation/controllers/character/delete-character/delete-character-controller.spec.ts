@@ -1,3 +1,4 @@
+import { noContent } from '@/presentation/helpers/http/http-helper'
 import { RemoveCharacterSpy } from '@/presentation/test/mocks/character'
 import { HttpRequest } from '../../login/login/login-controller-protocols'
 import { RemoveCharacterController } from './delete-character-controller'
@@ -29,5 +30,12 @@ describe('RemoveCharacter Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(removeSpy).toHaveBeenCalled()
+  })
+
+  test('Should return 204 if deleted character succeed', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(noContent())
   })
 })
