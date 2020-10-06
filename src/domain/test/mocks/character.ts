@@ -10,7 +10,7 @@ export const mockAddCharacterParams = (): AddCharacterParams => ({
   world: 'Duna',
   residence: 'Thais',
   priority: 1,
-  status: 'hunted'
+  status: 'Premium Account'
 
 })
 
@@ -23,5 +23,29 @@ export const mockCharacterModel = (): CharacterModel => ({
   world: 'Duna',
   residence: 'Thais',
   priority: 1,
-  status: 'hunted'
+  status: 'Premium Account'
 })
+
+export const mockCharacterModels = (): CharacterModel[] => {
+  return [{
+    id: faker.random.uuid(),
+    name: faker.internet.userName(),
+    sex: 'male',
+    vocation: 'Elite Knight',
+    level: 100,
+    world: 'Duna',
+    residence: 'Thais',
+    priority: 1,
+    status: 'Premium Account'
+  }, {
+    id: faker.random.uuid(),
+    name: faker.internet.userName(),
+    sex: 'male',
+    vocation: 'Elite Knight',
+    level: 100,
+    world: 'Duna',
+    residence: 'Thais',
+    priority: 1,
+    status: 'Premium Account'
+  }]
+}

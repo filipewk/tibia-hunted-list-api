@@ -5,7 +5,7 @@ import { LoadCharacters } from '@/domain/usecases/character/load-characters'
 export class DbLoadCharacters implements LoadCharacters {
   constructor (private readonly loadCharactersRepository: LoadCharactersRepository) {}
 
-  async load (): Promise<CharacterModel> {
+  async load (): Promise<CharacterModel[]> {
     const characters = await this.loadCharactersRepository.loadAll()
     return characters
   }

@@ -2,7 +2,7 @@ import { AddCharacterRepository } from '@/data/protocols/db/character/add-charac
 import { LoadCharacterByNameRepository } from '@/data/protocols/db/character/load-character-by-name-repository'
 import { LoadCharactersRepository } from '@/data/protocols/db/character/load-characters-repository'
 import { CharacterModel } from '@/domain/models/character'
-import { mockCharacterModel } from '@/domain/test/mocks/character'
+import { mockCharacterModel, mockCharacterModels } from '@/domain/test/mocks/character'
 import { AddCharacterParams } from '@/domain/usecases/character/add-character'
 
 export const mockAddCharacterRepository = (): AddCharacterRepository => {
@@ -25,9 +25,9 @@ export class LoadCharacterByNameRepositorySpy implements LoadCharacterByNameRepo
 }
 
 export class LoadCharactersRepositorySpy implements LoadCharactersRepository {
-  characterModel = mockCharacterModel()
+  characterModel = mockCharacterModels()
 
-  async loadAll (): Promise<CharacterModel> {
+  async loadAll (): Promise<CharacterModel[]> {
     return this.characterModel
   }
 }
