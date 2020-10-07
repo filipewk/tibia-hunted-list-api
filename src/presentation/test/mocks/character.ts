@@ -24,7 +24,8 @@ export class LoadCharactersSpy implements LoadCharacters {
 export class DeleteCharacterSpy implements DeleteCharacter {
   characterId: string
 
-  async remove (id: string): Promise<void> {
+  async remove (id: string): Promise<boolean> {
     this.characterId = id
+    return true
   }
 }

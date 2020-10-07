@@ -29,3 +29,5 @@ describe('Character Routes', () => {
     })
   })
 })
+
+// TODO test route DELETE and GET

@@ -2,9 +2,10 @@ import { DeleteCharacterByIdRepository } from '@/data/protocols/db/character/del
 import { DeleteCharacter } from '@/domain/usecases/character/delete-character'
 
 export class DbDeleteCharacter implements DeleteCharacter {
-  constructor (private readonly deleteCharacterById: DeleteCharacterByIdRepository) {}
+  constructor (private readonly deleteCharacterByIdRepository: DeleteCharacterByIdRepository) {}
 
-  async remove (id: string): Promise<void> {
-    await this.deleteCharacterById.deleteById(id)
+  async remove (id: string): Promise<boolean> {
+    const isDeleted = await this.deleteCharacterByIdRepository.deleteById(id)
+    return isDeleted
   }
 }

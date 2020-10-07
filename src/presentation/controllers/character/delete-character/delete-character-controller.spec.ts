@@ -44,4 +44,6 @@ describe('RemoveCharacter Controller', () => {
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
+
+  // TODO return 400 if RemoveCharacter return false and test forbiden invalid param error
 })

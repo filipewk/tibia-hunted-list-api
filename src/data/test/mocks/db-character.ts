@@ -36,7 +36,8 @@ export class LoadCharactersRepositorySpy implements LoadCharactersRepository {
 export class DeleteByIdRepositorySpy implements DeleteCharacterByIdRepository {
   characterId: string
 
-  async deleteById (id: string): Promise<void> {
+  async deleteById (id: string): Promise<boolean> {
     this.characterId = id
+    return true
   }
 }

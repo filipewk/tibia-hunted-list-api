@@ -1,6 +1,6 @@
 import { Controller, HttpRequest, HttpResponse } from './delete-character-controller-protocols'
-import { ServerError } from '@/presentation/errors'
-import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError, ServerError } from '@/presentation/errors'
+import { forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { DeleteCharacter } from '@/domain/usecases/character/delete-character'
 
 export class DeleteCharacterController implements Controller {
@@ -11,7 +11,10 @@ export class DeleteCharacterController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { characterId } = httpRequest.params
-      await this.removeCharacter.remove(characterId)
+      const isDeleted = await this.removeCharacter.remove(characterId)
+      if (!isDeleted) {
+        return forbidden(new InvalidParamError('characterId'))
+      }
       return noContent()
     } catch (error) {
       return serverError(new ServerError(error.stack))

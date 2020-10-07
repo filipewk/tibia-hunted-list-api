@@ -1,3 +1,3 @@
 export interface DeleteCharacterByIdRepository {
-  deleteById: (id: string) => Promise<void>
+  deleteById: (id: string) => Promise<boolean>
 }
