@@ -3,7 +3,7 @@ import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { DeleteCharacter } from '@/domain/usecases/character/delete-character'
 
-export class RemoveCharacterController implements Controller {
+export class DeleteCharacterController implements Controller {
   constructor (
     private readonly removeCharacter: DeleteCharacter
   ) {}

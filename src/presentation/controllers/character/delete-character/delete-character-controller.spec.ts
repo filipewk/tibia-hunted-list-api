@@ -1,4 +1,4 @@
-import { RemoveCharacterController } from './delete-character-controller'
+import { DeleteCharacterController } from './delete-character-controller'
 import { HttpRequest, DeleteCharacterSpy } from './delete-character-controller-protocols'
 import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
@@ -10,13 +10,13 @@ const mockRequest = (): HttpRequest => ({
 })
 
 type SutTypes = {
-  sut: RemoveCharacterController
+  sut: DeleteCharacterController
   removeCharacterStub: DeleteCharacterSpy
 }
 
 const makeSut = (): SutTypes => {
   const removeCharacterStub = new DeleteCharacterSpy()
-  const sut = new RemoveCharacterController(removeCharacterStub)
+  const sut = new DeleteCharacterController(removeCharacterStub)
   return {
     sut,
     removeCharacterStub
