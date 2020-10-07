@@ -29,6 +29,13 @@ describe('DbDeleteCharacter UseCase', () => {
     expect(isDeleted).toBe(true)
   })
 
+  test('Should DbDeleteCharacter return false when fails', async () => {
+    const { sut, deleteCharacterRepositoryStub } = makeSut()
+    jest.spyOn(deleteCharacterRepositoryStub, 'deleteById').mockReturnValueOnce(Promise.resolve(false))
+    const isDeleted = await sut.remove('wrong_id')
+    expect(isDeleted).toBe(false)
+  })
+
   test('Should throw if DeleteCharacterRepository throws', async () => {
     const { sut, deleteCharacterRepositoryStub } = makeSut()
     jest.spyOn(deleteCharacterRepositoryStub, 'deleteById').mockRejectedValueOnce(new Error())
@@ -36,5 +43,3 @@ describe('DbDeleteCharacter UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 })
-
-// TODO test return true or false
