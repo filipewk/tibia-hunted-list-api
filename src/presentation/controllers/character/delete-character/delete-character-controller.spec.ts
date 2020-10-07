@@ -1,7 +1,7 @@
 import { DeleteCharacterController } from './delete-character-controller'
 import { HttpRequest, DeleteCharacterSpy } from './delete-character-controller-protocols'
-import { ServerError } from '@/presentation/errors'
-import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError, ServerError } from '@/presentation/errors'
+import { forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 
 const mockRequest = (): HttpRequest => ({
   params: {
@@ -38,12 +38,17 @@ describe('RemoveCharacter Controller', () => {
     expect(httpResponse).toEqual(noContent())
   })
 
+  test('Should return 400 if an invalid id is provided', async () => {
+    const { sut, removeCharacterStub } = makeSut()
+    jest.spyOn(removeCharacterStub, 'remove').mockReturnValueOnce(Promise.resolve(false))
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('characterId')))
+  })
+
   test('Should return 500 if RemoveCharacter throw', async () => {
     const { sut, removeCharacterStub } = makeSut()
     jest.spyOn(removeCharacterStub, 'remove').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
-
-  // TODO return 400 if RemoveCharacter return false and test forbiden invalid param error
 })
