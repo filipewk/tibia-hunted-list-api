@@ -122,5 +122,22 @@ describe('Account Postgres Repository', () => {
       character = await Character.findOne({ where: { name: 'Teste1' } })
       expect(character).toBeFalsy()
     })
+
+    test('Should deleteById return true on success', async () => {
+      const sut = makeSut()
+      await Character.create({
+        name: 'Teste1',
+        sex: 'male',
+        vocation: 'Elite Knight',
+        level: 50,
+        world: 'Duna',
+        residence: 'Edron',
+        priority: 1,
+        status: 'Premium Account'
+      })
+      const character = await Character.findOne({ where: { name: 'Teste1' } })
+      const isDeleted = await sut.deleteById(character.id)
+      expect(isDeleted).toBe(true)
+    })
   })
 })
