@@ -45,6 +45,13 @@ describe('Character Routes', () => {
         .expect(204)
     })
   })
-})
 
-// TODO test route DELETE and GET
+  describe('DELETE /character/:characterId', () => {
+    test('Should return 204 when successfully deleting character ', async () => {
+      const character = await makeCreateCharacter('Character Teste1')
+      await request(app)
+        .delete(`/api/character/${character.id}`)
+        .expect(204)
+    })
+  })
+})

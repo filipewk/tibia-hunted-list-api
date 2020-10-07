@@ -51,8 +51,8 @@ export const mockCharacterModels = (): CharacterModel[] => {
   }]
 }
 
-export const makeCreateCharacter = async (name: string): Promise<void> => {
-  await Character.create({
+export const makeCreateCharacter = async (name: string): Promise<CharacterModel> => {
+  const character = await Character.create({
     name,
     sex: 'male',
     vocation: 'Elite Knight',
@@ -62,4 +62,5 @@ export const makeCreateCharacter = async (name: string): Promise<void> => {
     priority: 1,
     status: 'Premium Account'
   })
+  return character
 }
