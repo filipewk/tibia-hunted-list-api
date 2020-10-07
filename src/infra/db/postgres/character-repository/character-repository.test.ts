@@ -103,4 +103,24 @@ describe('Account Postgres Repository', () => {
       expect(characters.length).toBe(0)
     })
   })
+
+  describe('deleteById()', () => {
+    test('Should delete character by id', async () => {
+      const sut = makeSut()
+      await Character.create({
+        name: 'Teste1',
+        sex: 'male',
+        vocation: 'Elite Knight',
+        level: 50,
+        world: 'Duna',
+        residence: 'Edron',
+        priority: 1,
+        status: 'Premium Account'
+      })
+      let character = await Character.findOne({ where: { name: 'Teste1' } })
+      await sut.deleteById(character.id)
+      character = await Character.findOne({ where: { name: 'Teste1' } })
+      expect(character).toBeFalsy()
+    })
+  })
 })
