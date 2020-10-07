@@ -24,11 +24,12 @@ const makeSut = (): SutTypes => {
 }
 
 describe('RemoveCharacter Controller', () => {
-  test('Should call RemoveCharacter', async () => {
+  test('Should call RemoveCharacter with correct id', async () => {
     const { sut, removeCharacterStub } = makeSut()
     const removeSpy = jest.spyOn(removeCharacterStub, 'remove')
-    await sut.handle(mockRequest())
-    expect(removeSpy).toHaveBeenCalled()
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(removeSpy).toHaveBeenCalledWith(removeCharacterStub.characterId)
   })
 
   test('Should return 204 if deleted character succeed', async () => {
