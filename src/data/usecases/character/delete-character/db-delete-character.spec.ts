@@ -1,7 +1,12 @@
 import { DeleteByIdRepositorySpy } from '@/data/test/mocks'
 import { DbDeleteCharacter } from './db-delete-character'
 
-const makeSut = (): any => {
+type SutTypes = {
+  sut: DbDeleteCharacter
+  deleteCharacterRepositoryStub: DeleteByIdRepositorySpy
+}
+
+const makeSut = (): SutTypes => {
   const deleteCharacterRepositoryStub = new DeleteByIdRepositorySpy()
   const sut = new DbDeleteCharacter(deleteCharacterRepositoryStub)
   return {
