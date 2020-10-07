@@ -1,4 +1,5 @@
 import { AddCharacterRepository } from '@/data/protocols/db/character/add-character-repository'
+import { DeleteCharacterByIdRepository } from '@/data/protocols/db/character/delete-character-by-id-repository'
 import { LoadCharacterByNameRepository } from '@/data/protocols/db/character/load-character-by-name-repository'
 import { LoadCharactersRepository } from '@/data/protocols/db/character/load-characters-repository'
 import { CharacterModel } from '@/domain/models/character'
@@ -29,5 +30,13 @@ export class LoadCharactersRepositorySpy implements LoadCharactersRepository {
 
   async loadAll (): Promise<CharacterModel[]> {
     return this.characterModel
+  }
+}
+
+export class DeleteByIdRepositorySpy implements DeleteCharacterByIdRepository {
+  characterId: string
+
+  async deleteById (id: string): Promise<void> {
+    this.characterId = id
   }
 }

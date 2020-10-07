@@ -1,11 +1,11 @@
 import { Controller, HttpRequest, HttpResponse } from './delete-character-controller-protocols'
 import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { RemoveCharacter } from '@/domain/usecases/character/delete-character'
+import { DeleteCharacter } from '@/domain/usecases/character/delete-character'
 
 export class RemoveCharacterController implements Controller {
   constructor (
-    private readonly removeCharacter: RemoveCharacter
+    private readonly removeCharacter: DeleteCharacter
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
