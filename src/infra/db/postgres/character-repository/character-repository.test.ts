@@ -1,10 +1,21 @@
 import { CharacterPostgresRepository } from './character-repository'
-import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
-import { mockAddCharacterParams, mockCharacterModel } from '@/domain/test/mocks/character'
 import Character from '../models/character'
+import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
+import { mockAddCharacterParams } from '@/domain/test/mocks/character'
 import env from '@/main/config/env'
 
-const character = mockCharacterModel()
+const makeCreateCharacter = async (name: string): Promise<void> => {
+  await Character.create({
+    name,
+    sex: 'male',
+    vocation: 'Elite Knight',
+    level: 50,
+    world: 'Duna',
+    residence: 'Edron',
+    priority: 1,
+    status: 'Premium Account'
+  })
+}
 
 const makeSut = (): CharacterPostgresRepository => {
   return new CharacterPostgresRepository()
@@ -26,17 +37,9 @@ describe('Account Postgres Repository', () => {
   describe('add()', () => {
     test('Should add character on success', async () => {
       const sut = makeSut()
-      await sut.add({
-        name: 'On Rails',
-        sex: 'male',
-        vocation: 'Elite Knight',
-        level: 50,
-        world: 'Duna',
-        residence: 'Edron',
-        priority: 1,
-        status: 'Premium Account'
-      })
-      const character = await Character.findOne({ where: { name: 'On Rails' } })
+      const characterParams = mockAddCharacterParams()
+      await sut.add(characterParams)
+      const character = await Character.findOne({ where: { name: characterParams.name } })
       expect(character).toBeTruthy()
     })
   })
@@ -44,51 +47,33 @@ describe('Account Postgres Repository', () => {
   describe('loadByName()', () => {
     test('Should return a character on success', async () => {
       const sut = makeSut()
-      const addCharacterParams = mockAddCharacterParams()
-      await sut.add(addCharacterParams)
-      const dbCharacter = await sut.loadByName(addCharacterParams.name)
-      expect(dbCharacter).toBeTruthy()
-      expect(dbCharacter.id).toBeTruthy()
-      expect(dbCharacter.name).toBe(addCharacterParams.name)
-      expect(dbCharacter.level).toBe(addCharacterParams.level)
-      expect(dbCharacter.priority).toBe(addCharacterParams.priority)
-      expect(dbCharacter.residence).toBe(addCharacterParams.residence)
-      expect(dbCharacter.sex).toBe(addCharacterParams.sex)
-      expect(dbCharacter.status).toBe(addCharacterParams.status)
-      expect(dbCharacter.vocation).toBe(addCharacterParams.vocation)
-      expect(dbCharacter.world).toBe(addCharacterParams.world)
+      const characterParams = mockAddCharacterParams()
+      await sut.add(characterParams)
+      const character = await sut.loadByName(characterParams.name)
+      expect(character).toBeTruthy()
+      expect(character.id).toBeTruthy()
+      expect(character.name).toBe(characterParams.name)
+      expect(character.level).toBe(characterParams.level)
+      expect(character.priority).toBe(characterParams.priority)
+      expect(character.residence).toBe(characterParams.residence)
+      expect(character.sex).toBe(characterParams.sex)
+      expect(character.status).toBe(characterParams.status)
+      expect(character.vocation).toBe(characterParams.vocation)
+      expect(character.world).toBe(characterParams.world)
     })
 
     test('Should return null with LoadByName fails', async () => {
       const sut = makeSut()
-      const dbCharacter = await sut.loadByName(character.name)
-      expect(dbCharacter).toBeFalsy()
+      const character = await sut.loadByName('wrong_name')
+      expect(character).toBeFalsy()
     })
   })
 
   describe('loadAll()', () => {
     test('Should load all characters on success', async () => {
       const sut = makeSut()
-      await Character.create({
-        name: 'Teste1',
-        sex: 'male',
-        vocation: 'Elite Knight',
-        level: 50,
-        world: 'Duna',
-        residence: 'Edron',
-        priority: 1,
-        status: 'Premium Account'
-      })
-      await Character.create({
-        name: 'Teste2',
-        sex: 'male',
-        vocation: 'Elite Knight',
-        level: 50,
-        world: 'Duna',
-        residence: 'Edron',
-        priority: 1,
-        status: 'Premium Account'
-      })
+      await makeCreateCharacter('Teste1')
+      await makeCreateCharacter('Teste2')
       const characters = await sut.loadAll()
       expect(characters.length).toBe(2)
       expect(characters[0].id).toBeTruthy()
@@ -107,16 +92,7 @@ describe('Account Postgres Repository', () => {
   describe('deleteById()', () => {
     test('Should delete character by id', async () => {
       const sut = makeSut()
-      await Character.create({
-        name: 'Teste1',
-        sex: 'male',
-        vocation: 'Elite Knight',
-        level: 50,
-        world: 'Duna',
-        residence: 'Edron',
-        priority: 1,
-        status: 'Premium Account'
-      })
+      await makeCreateCharacter('Teste1')
       let character = await Character.findOne({ where: { name: 'Teste1' } })
       await sut.deleteById(character.id)
       character = await Character.findOne({ where: { name: 'Teste1' } })
@@ -125,16 +101,7 @@ describe('Account Postgres Repository', () => {
 
     test('Should deleteById return true on success', async () => {
       const sut = makeSut()
-      await Character.create({
-        name: 'Teste1',
-        sex: 'male',
-        vocation: 'Elite Knight',
-        level: 50,
-        world: 'Duna',
-        residence: 'Edron',
-        priority: 1,
-        status: 'Premium Account'
-      })
+      await makeCreateCharacter('Teste1')
       const character = await Character.findOne({ where: { name: 'Teste1' } })
       const isDeleted = await sut.deleteById(character.id)
       expect(isDeleted).toBe(true)
