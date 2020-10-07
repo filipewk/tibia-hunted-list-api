@@ -1,21 +1,8 @@
 import { CharacterPostgresRepository } from './character-repository'
 import Character from '../models/character'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
-import { mockAddCharacterParams } from '@/domain/test/mocks/character'
+import { makeCreateCharacter, mockAddCharacterParams } from '@/domain/test/mocks/character'
 import env from '@/main/config/env'
-
-const makeCreateCharacter = async (name: string): Promise<void> => {
-  await Character.create({
-    name,
-    sex: 'male',
-    vocation: 'Elite Knight',
-    level: 50,
-    world: 'Duna',
-    residence: 'Edron',
-    priority: 1,
-    status: 'Premium Account'
-  })
-}
 
 const makeSut = (): CharacterPostgresRepository => {
   return new CharacterPostgresRepository()

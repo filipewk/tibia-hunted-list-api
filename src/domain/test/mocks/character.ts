@@ -1,5 +1,6 @@
 import { AddCharacterParams } from '@/domain/usecases/character/add-character'
 import { CharacterModel } from '@/domain/models/character'
+import Character from '@/infra/db/postgres/models/character'
 import faker from 'faker'
 
 export const mockAddCharacterParams = (): AddCharacterParams => ({
@@ -48,4 +49,17 @@ export const mockCharacterModels = (): CharacterModel[] => {
     priority: 1,
     status: 'Premium Account'
   }]
+}
+
+export const makeCreateCharacter = async (name: string): Promise<void> => {
+  await Character.create({
+    name,
+    sex: 'male',
+    vocation: 'Elite Knight',
+    level: 50,
+    world: 'Duna',
+    residence: 'Edron',
+    priority: 1,
+    status: 'Premium Account'
+  })
 }
