@@ -17,4 +17,11 @@ describe('DbDeleteCharacter UseCase', () => {
     await sut.remove('any_id')
     expect(deleteSpy).toHaveBeenCalledWith(deleteCharacterRepositoryStub.characterId)
   })
+
+  test('Should throw if DeleteCharacterRepository throws', async () => {
+    const { sut, deleteCharacterRepositoryStub } = makeSut()
+    jest.spyOn(deleteCharacterRepositoryStub, 'deleteById').mockRejectedValueOnce(new Error())
+    const promise = sut.remove('any_id')
+    await expect(promise).rejects.toThrow()
+  })
 })
