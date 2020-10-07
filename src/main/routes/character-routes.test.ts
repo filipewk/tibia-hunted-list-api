@@ -38,6 +38,12 @@ describe('Character Routes', () => {
         .get('/api/characters')
         .expect(200)
     })
+
+    test('Should return 204 when there is no character to load', async () => {
+      await request(app)
+        .get('/api/characters')
+        .expect(204)
+    })
   })
 })
 
