@@ -3,6 +3,7 @@ import env from '@/main/config/env'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
 import request from 'supertest'
 import Character from '@/infra/db/postgres/models/character'
+import { makeCreateCharacter } from '@/domain/test/mocks/character'
 
 describe('Character Routes', () => {
   beforeAll(() => {
@@ -26,6 +27,16 @@ describe('Character Routes', () => {
           priority: 1
         })
         .expect(204)
+    })
+  })
+
+  describe('GET /characters', () => {
+    test('Should return 200 when have a character-list ', async () => {
+      await makeCreateCharacter('Character Teste1')
+      await makeCreateCharacter('Character Teste2')
+      await request(app)
+        .get('/api/characters')
+        .expect(200)
     })
   })
 })
