@@ -4,6 +4,7 @@ import { AddCharacterParams, AddCharacter } from '@/domain/usecases/character/ad
 import { DeleteCharacter } from '@/domain/usecases/character/delete-character'
 import { LoadCharacterById } from '@/domain/usecases/character/load-character-by-id'
 import { LoadCharacters } from '@/domain/usecases/character/load-characters'
+import { UpdateCharacter, UpdateCharacterParams } from '@/domain/usecases/character/update-character'
 
 export class AddCharacterSpy implements AddCharacter {
   addCharacterParams: AddCharacterParams
@@ -38,5 +39,22 @@ export class LoadCharacterByIdSpy implements LoadCharacterById {
   async load (id: string): Promise<CharacterModel> {
     this.characterId = id
     return this.characterModel
+  }
+}
+
+export class UpdateCharacterSpy implements UpdateCharacter {
+  characterId: string
+  name: string
+  level: string
+  status: string
+  priority: number
+
+  async update (data: UpdateCharacterParams): Promise<boolean> {
+    this.characterId = data.characterId
+    this.name = data.name
+    this.level = data.level
+    this.status = data.status
+    this.priority = data.priority
+    return true
   }
 }
