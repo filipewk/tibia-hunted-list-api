@@ -1,7 +1,8 @@
-import { noContent } from '@/presentation/helpers/http/http-helper'
-import { UpdateCharacterSpy } from '../add-character/add-character-controller-protocols'
 import { UpdateCharacterController } from './update-character-controller'
 import { HttpRequest, LoadCharacterByIdSpy } from './update-character-controller-protocols'
+import { UpdateCharacterSpy } from '../add-character/add-character-controller-protocols'
+import { ServerError } from '@/presentation/errors'
+import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -61,5 +62,12 @@ describe('UpdateCharacter Controller', () => {
     const httpRequest = mockRequest()
     const httpReponse = await sut.handle(httpRequest)
     expect(httpReponse).toEqual(noContent())
+  })
+
+  test('Should return 500 if UpdateCharacter throw', async () => {
+    const { sut, updateCharacterStub } = makeSut()
+    jest.spyOn(updateCharacterStub, 'update').mockRejectedValueOnce(new Error())
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
