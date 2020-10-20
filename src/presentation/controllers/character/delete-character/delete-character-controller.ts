@@ -11,8 +11,8 @@ export class DeleteCharacterController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { characterId } = httpRequest.params
-      const isDeleted = await this.removeCharacter.remove(characterId)
-      if (!isDeleted) {
+      const isValid = await this.removeCharacter.remove(characterId)
+      if (!isValid) {
         return forbidden(new InvalidParamError('characterId'))
       }
       return noContent()
