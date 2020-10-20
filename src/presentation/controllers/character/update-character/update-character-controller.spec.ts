@@ -1,5 +1,5 @@
 import { UpdateCharacterController } from './update-character-controller'
-import { HttpRequest, LoadCharacterByIdSpy } from './update-character-controller-protocols'
+import { HttpRequest } from './update-character-controller-protocols'
 import { UpdateCharacterSpy } from '../add-character/add-character-controller-protocols'
 import { ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
@@ -18,30 +18,19 @@ const mockRequest = (): HttpRequest => ({
 
 type SutTypes = {
   sut: UpdateCharacterController
-  loadCharacterByIdStub: LoadCharacterByIdSpy
   updateCharacterStub: UpdateCharacterSpy
 }
 
 const makeSut = (): SutTypes => {
   const updateCharacterStub = new UpdateCharacterSpy()
-  const loadCharacterByIdStub = new LoadCharacterByIdSpy()
-  const sut = new UpdateCharacterController(loadCharacterByIdStub, updateCharacterStub)
+  const sut = new UpdateCharacterController(updateCharacterStub)
   return {
     sut,
-    loadCharacterByIdStub,
     updateCharacterStub
   }
 }
 
 describe('UpdateCharacter Controller', () => {
-  test('Should call LoadCharacterById with correct id', async () => {
-    const { sut, loadCharacterByIdStub } = makeSut()
-    const loadSpy = jest.spyOn(loadCharacterByIdStub, 'load')
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(loadSpy).toHaveBeenCalledWith(loadCharacterByIdStub.characterId)
-  })
-
   test('Should call UpdateCharacter with correct values', async () => {
     const { sut, updateCharacterStub } = makeSut()
     const loadSpy = jest.spyOn(updateCharacterStub, 'update')
