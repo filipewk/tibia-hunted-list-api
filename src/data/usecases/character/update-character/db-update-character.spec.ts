@@ -30,4 +30,11 @@ describe('DbUpdateCharacter Usecase', () => {
     const isValid = await sut.update('wrong_data')
     expect(isValid).toBe(false)
   })
+
+  test('Should throw if UpdateCharacterRepository throws', async () => {
+    const { sut, updateCharacterRepositoryStub } = makeSut()
+    jest.spyOn(updateCharacterRepositoryStub, 'updateCharacter').mockRejectedValueOnce(new Error())
+    const promise = sut.update('any_data')
+    await expect(promise).rejects.toThrow()
+  })
 })
