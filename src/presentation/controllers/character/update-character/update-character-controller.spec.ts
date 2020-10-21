@@ -2,6 +2,7 @@ import { UpdateCharacterController } from './update-character-controller'
 import { HttpRequest, UpdateCharacterSpy } from './update-character-controller-protocols'
 import { InvalidParamError, ServerError } from '@/presentation/errors'
 import { forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { CharacterValidatorApiAdapter } from '../add-character/add-character-controller-protocols'
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -18,14 +19,17 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: UpdateCharacterController
   updateCharacterStub: UpdateCharacterSpy
+  characterValidatorApi: CharacterValidatorApiAdapter
 }
 
 const makeSut = (): SutTypes => {
+  const characterValidatorApi = new CharacterValidatorApiAdapter()
   const updateCharacterStub = new UpdateCharacterSpy()
-  const sut = new UpdateCharacterController(updateCharacterStub)
+  const sut = new UpdateCharacterController(updateCharacterStub, characterValidatorApi)
   return {
     sut,
-    updateCharacterStub
+    updateCharacterStub,
+    characterValidatorApi
   }
 }
 
@@ -50,6 +54,14 @@ describe('UpdateCharacter Controller', () => {
     const httpRequest = mockRequest()
     const httpReponse = await sut.handle(httpRequest)
     expect(httpReponse).toEqual(noContent())
+  })
+
+  test('Should call CharacterValidatorApi with a same name of request', async () => {
+    const { sut, characterValidatorApi } = makeSut()
+    const characterSpy = jest.spyOn(characterValidatorApi, 'isValid')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.name)
   })
 
   test('Should return 400 if an invalid id is provided', async () => {
