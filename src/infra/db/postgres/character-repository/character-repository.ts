@@ -27,11 +27,11 @@ export class CharacterPostgresRepository implements AddCharacterRepository, Load
   }
 
   async deleteById (id: string): Promise<boolean> {
-    const isDeleted = await Character.destroy({
+    const isValid = await Character.destroy({
       where: {
         id
       }
     })
-    return !!isDeleted
+    return !!isValid
   }
 }

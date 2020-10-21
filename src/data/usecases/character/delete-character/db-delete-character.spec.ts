@@ -25,15 +25,15 @@ describe('DbDeleteCharacter UseCase', () => {
 
   test('Should DbDeleteCharacter return true on success', async () => {
     const { sut } = makeSut()
-    const isDeleted = await sut.remove('any_id')
-    expect(isDeleted).toBe(true)
+    const isValid = await sut.remove('any_id')
+    expect(isValid).toBe(true)
   })
 
   test('Should DbDeleteCharacter return false when fails', async () => {
     const { sut, deleteCharacterRepositoryStub } = makeSut()
     jest.spyOn(deleteCharacterRepositoryStub, 'deleteById').mockReturnValueOnce(Promise.resolve(false))
-    const isDeleted = await sut.remove('wrong_id')
-    expect(isDeleted).toBe(false)
+    const isValid = await sut.remove('wrong_id')
+    expect(isValid).toBe(false)
   })
 
   test('Should throw if DeleteCharacterRepository throws', async () => {
