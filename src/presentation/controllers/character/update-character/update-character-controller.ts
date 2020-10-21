@@ -1,8 +1,7 @@
-import { Controller, HttpRequest, HttpResponse } from './update-character-controller-protocols'
-import { forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { Controller, HttpRequest, HttpResponse, CharacterValidatorApiAdapter } from './update-character-controller-protocols'
+import { badRequest, forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { UpdateCharacter } from '@/domain/usecases/character/update-character'
-import { InvalidParamError, ServerError } from '@/presentation/errors'
-import { CharacterValidatorApiAdapter } from '../add-character/add-character-controller-protocols'
+import { CharacterDoesNotExist, InvalidParamError, ServerError } from '@/presentation/errors'
 
 export class UpdateCharacterController implements Controller {
   constructor (
@@ -12,9 +11,13 @@ export class UpdateCharacterController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      const { character, priority } = httpRequest.body
+      const tibiaDataApi = await this.characterApiValidator.isValid(character)
+      if (!tibiaDataApi) {
+        return badRequest(new CharacterDoesNotExist())
+      }
       const { characterId } = httpRequest.params
-      const { name, level, status, priority } = httpRequest.body
-      await this.characterApiValidator.isValid(name)
+      const { name, level, status } = tibiaDataApi
       const isValid = await this.updateCharacter.update({
         characterId,
         name,
