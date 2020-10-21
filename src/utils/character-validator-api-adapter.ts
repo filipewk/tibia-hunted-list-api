@@ -8,9 +8,7 @@ export class CharacterValidatorApiAdapter implements CharacterValidator {
       .toLowerCase()
     const url = `https://api.tibiadata.com/v2/characters/${name}.json`
     const tibiaDataApi = await axios.get(url)
-    if (!tibiaDataApi.data.characters.error) {
-      return tibiaDataApi.data.characters.data
-    }
-    return false
+    const { error, data } = tibiaDataApi.data.characters
+    return error ? false : data
   }
 }
