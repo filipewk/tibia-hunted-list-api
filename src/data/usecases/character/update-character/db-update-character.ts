@@ -7,7 +7,7 @@ export class DbUpdateCharacter implements UpdateCharacter {
   ) {}
 
   async update (data: UpdateCharacterParams): Promise<boolean> {
-    await this.updateCharacterRepository.updateChacater(data)
-    return true
+    const isValid = await this.updateCharacterRepository.updateCharacter(data)
+    return isValid
   }
 }

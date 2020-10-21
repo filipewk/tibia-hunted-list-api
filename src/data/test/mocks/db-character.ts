@@ -38,7 +38,7 @@ export class LoadCharactersRepositorySpy implements LoadCharactersRepository {
 export class UpdateCharacterRepositorySpy implements UpdateCharacterRepository {
   characterData: UpdateCharacterParams
 
-  async updateChacater (data: UpdateCharacterParams): Promise<boolean> {
+  async updateCharacter (data: UpdateCharacterParams): Promise<boolean> {
     this.characterData = data
     return await Promise.resolve(true)
   }
