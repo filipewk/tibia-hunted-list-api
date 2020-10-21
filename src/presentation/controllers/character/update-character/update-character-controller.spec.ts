@@ -1,6 +1,5 @@
 import { UpdateCharacterController } from './update-character-controller'
-import { HttpRequest } from './update-character-controller-protocols'
-import { UpdateCharacterSpy } from '../add-character/add-character-controller-protocols'
+import { HttpRequest, UpdateCharacterSpy } from './update-character-controller-protocols'
 import { InvalidParamError, ServerError } from '@/presentation/errors'
 import { forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 
