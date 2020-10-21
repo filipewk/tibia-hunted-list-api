@@ -18,6 +18,12 @@ describe('DbUpdateCharacter Usecase', () => {
     expect(updateSpy).toHaveBeenCalled()
   })
 
+  test('Should DbUpdateCharacter return true on success', async () => {
+    const { sut } = makeSut()
+    const isValid = await sut.update('any_data')
+    expect(isValid).toBe(true)
+  })
+
   test('Should DbUpdateCharacter return false when updateCharacterRepository fails', async () => {
     const { sut, updateCharacterRepositoryStub } = makeSut()
     jest.spyOn(updateCharacterRepositoryStub, 'updateCharacter').mockReturnValueOnce(Promise.resolve(false))
