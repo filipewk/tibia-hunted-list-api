@@ -73,6 +73,14 @@ describe('UpdateCharacter Controller', () => {
     expect(character).toEqual(badRequest(new MissingParamError('character')))
   })
 
+  test('Should return 400 if no correct priority is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    httpRequest.body.priority = null
+    const character = await sut.handle(httpRequest)
+    expect(character).toEqual(badRequest(new MissingParamError('priority')))
+  })
+
   test('Should return 400 if an invalid character is provided', async () => {
     const { sut, characterValidatorApi } = makeSut()
     jest.spyOn(characterValidatorApi, 'isValid').mockReturnValueOnce(Promise.resolve(false))
