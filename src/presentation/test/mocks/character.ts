@@ -34,7 +34,7 @@ export class DeleteCharacterSpy implements DeleteCharacter {
 export class UpdateCharacterSpy implements UpdateCharacter {
   characterId: string
   name: string
-  level: string
+  level: number
   status: string
   priority: number
 

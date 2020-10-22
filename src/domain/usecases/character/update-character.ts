@@ -1,7 +1,7 @@
 export type UpdateCharacterParams = {
   characterId: string
   name: string
-  level: string
+  level: number
   status: string
   priority?: number
 }
