@@ -34,8 +34,17 @@ UpdateCharacterRepository {
   }
 
   async updateCharacter (data: UpdateCharacterParams): Promise<boolean> {
-    const { characterId, name, level, status, priority } = data
-    const character = await Character.update({ name, level, status, priority }, {
+    const { characterId, name, sex, vocation, level, world, residence, status, priority } = data
+    const character = await Character.update({
+      name,
+      level,
+      status,
+      priority,
+      sex,
+      vocation,
+      world,
+      residence
+    }, {
       where: {
         id: characterId
       }
