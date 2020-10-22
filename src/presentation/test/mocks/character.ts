@@ -32,18 +32,10 @@ export class DeleteCharacterSpy implements DeleteCharacter {
 }
 
 export class UpdateCharacterSpy implements UpdateCharacter {
-  characterId: string
-  name: string
-  level: number
-  status: string
-  priority: number
+  characterData: UpdateCharacterParams
 
   async update (data: UpdateCharacterParams): Promise<boolean> {
-    this.characterId = data.characterId
-    this.name = data.name
-    this.level = data.level
-    this.status = data.status
-    this.priority = data.priority
+    this.characterData = data
     return true
   }
 }

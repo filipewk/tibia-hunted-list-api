@@ -17,12 +17,16 @@ export class UpdateCharacterController implements Controller {
         return badRequest(new CharacterDoesNotExist())
       }
       const { characterId } = httpRequest.params
-      const { name, level, status } = tibiaDataApi
+      const { name, sex, vocation, level, world, residence } = tibiaDataApi
       const isValid = await this.updateCharacter.update({
         characterId,
         name,
+        sex,
+        vocation,
         level,
-        status,
+        world,
+        residence,
+        status: tibiaDataApi.account_status,
         priority
       })
       if (!isValid) {

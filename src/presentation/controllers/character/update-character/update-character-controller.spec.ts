@@ -36,11 +36,15 @@ describe('UpdateCharacter Controller', () => {
     const loadSpy = jest.spyOn(updateCharacterStub, 'update')
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    const { name, level, status, priority, characterId } = updateCharacterStub
+    const { name, level, status, priority, characterId, sex, vocation, world, residence } = updateCharacterStub.characterData
     expect(loadSpy).toHaveBeenCalledWith({
       characterId,
       name,
+      sex,
+      vocation,
       level,
+      world,
+      residence,
       status,
       priority
     })

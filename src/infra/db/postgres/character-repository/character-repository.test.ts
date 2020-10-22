@@ -1,7 +1,7 @@
 import { CharacterPostgresRepository } from './character-repository'
 import Character from '../models/character'
 import { sequelizeHelper } from '@/infra/db/postgres/helpers/sequelize-helper'
-import { makeCreateCharacter, mockAddCharacterParams } from '@/domain/test/mocks/character'
+import { makeCreateCharacter, mockAddCharacterParams, mockUpdateCharacterParams } from '@/domain/test/mocks/character'
 import env from '@/main/config/env'
 
 const makeSut = (): CharacterPostgresRepository => {
@@ -99,26 +99,16 @@ describe('Account Postgres Repository', () => {
     test('Should updateCharacter return true on success update', async () => {
       const sut = makeSut()
       await makeCreateCharacter('Teste1')
-      const findCharacter = await Character.findOne({ where: { name: 'Teste1' } })
-      const character = await sut.updateCharacter({
-        characterId: findCharacter.id,
-        name: 'teste',
-        level: 123,
-        status: 'freemium',
-        priority: 1
-      })
+      const characterData = await Character.findOne({ where: { name: 'Teste1' } })
+      const updateParams = mockUpdateCharacterParams()
+      updateParams.characterId = characterData.id
+      const character = await sut.updateCharacter(updateParams)
       expect(character).toBe(true)
     })
 
     test('Should updateCharacter return false when does exist characterId', async () => {
       const sut = makeSut()
-      const character = await sut.updateCharacter({
-        characterId: '1',
-        name: 'teste',
-        level: 123,
-        status: 'freemium',
-        priority: 1
-      })
+      const character = await sut.updateCharacter(mockUpdateCharacterParams())
       expect(character).toBe(false)
     })
   })
