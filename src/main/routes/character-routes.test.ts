@@ -46,6 +46,19 @@ describe('Character Routes', () => {
     })
   })
 
+  describe('PUT /character/:characterId', () => {
+    test('Should return 204 when successfully update character ', async () => {
+      const character = await makeCreateCharacter('Character Teste1')
+      await request(app)
+        .put(`/api/character/${character.id}`)
+        .send({
+          character: 'Filipe',
+          priority: 5
+        })
+        .expect(204)
+    })
+  })
+
   describe('DELETE /character/:characterId', () => {
     test('Should return 204 when successfully deleting character ', async () => {
       const character = await makeCreateCharacter('Character Teste1')
