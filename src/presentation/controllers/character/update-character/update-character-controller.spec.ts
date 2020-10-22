@@ -1,6 +1,6 @@
 import { UpdateCharacterController } from './update-character-controller'
 import { HttpRequest, UpdateCharacterSpy, CharacterValidatorApiAdapter } from './update-character-controller-protocols'
-import { CharacterDoesNotExist, InvalidParamError, ServerError } from '@/presentation/errors'
+import { CharacterDoesNotExist, InvalidParamError, MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 
 const mockRequest = (): HttpRequest => ({
@@ -63,6 +63,14 @@ describe('UpdateCharacter Controller', () => {
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
     expect(characterSpy).toHaveBeenCalledWith(httpRequest.body.character)
+  })
+
+  test('Should return 400 if no correct character is provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    httpRequest.body.character = null
+    const character = await sut.handle(httpRequest)
+    expect(character).toEqual(badRequest(new MissingParamError('character')))
   })
 
   test('Should return 400 if an invalid character is provided', async () => {

@@ -1,7 +1,7 @@
 import { Controller, HttpRequest, HttpResponse, CharacterValidatorApiAdapter } from './update-character-controller-protocols'
 import { badRequest, forbidden, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { UpdateCharacter } from '@/domain/usecases/character/update-character'
-import { CharacterDoesNotExist, InvalidParamError, ServerError } from '@/presentation/errors'
+import { CharacterDoesNotExist, InvalidParamError, MissingParamError, ServerError } from '@/presentation/errors'
 
 export class UpdateCharacterController implements Controller {
   constructor (
@@ -12,6 +12,12 @@ export class UpdateCharacterController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { character, priority } = httpRequest.body
+      const requiredField = ['character', 'priority']
+      for (const field of requiredField) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
+      }
       const tibiaDataApi = await this.characterApiValidator.isValid(character)
       if (!tibiaDataApi) {
         return badRequest(new CharacterDoesNotExist())
