@@ -96,7 +96,7 @@ describe('Account Postgres Repository', () => {
   })
 
   describe('updateCharacter()', () => {
-    test('Should update character with values', async () => {
+    test('Should updateCharacter return true on success update', async () => {
       const sut = makeSut()
       await makeCreateCharacter('Teste1')
       const findCharacter = await Character.findOne({ where: { name: 'Teste1' } })
@@ -108,6 +108,18 @@ describe('Account Postgres Repository', () => {
         priority: 1
       })
       expect(character).toBe(true)
+    })
+
+    test('Should updateCharacter return false when does exist characterId', async () => {
+      const sut = makeSut()
+      const character = await sut.updateCharacter({
+        characterId: '1',
+        name: 'teste',
+        level: 123,
+        status: 'freemium',
+        priority: 1
+      })
+      expect(character).toBe(false)
     })
   })
 })

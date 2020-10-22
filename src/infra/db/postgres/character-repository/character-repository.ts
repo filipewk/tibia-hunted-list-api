@@ -40,7 +40,8 @@ UpdateCharacterRepository {
         id: characterId
       }
     })
-    return !!character
+    console.log('akita', character[0])
+    return !!character[0]
   }
 
   async deleteById (id: string): Promise<boolean> {
