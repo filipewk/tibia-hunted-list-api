@@ -55,7 +55,7 @@
     "module-alias": "^2.2.2",
     "pg": "^8.3.3",
     "sequelize": "^6.3.5",
-    "validator": "^13.1.17"
+    "validator": "^13.7.0"
   },
   "_moduleAliases": {
     "@": "dist"
